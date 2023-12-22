@@ -5,10 +5,10 @@ import { client } from './models/data-model.js'
 import SignUp from './controllers/signup.controller.js';
 import LogIn from './controllers/login.controller.js';
 import { auth_middleware } from './middlewares/auth.middleware.js';
-
 const app = express();
+import itemRouter from './routes/itemRoute.js';
 dotenv.config({ path: './.env' });
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -40,6 +40,8 @@ const connectDB = async () => {
 }
 connectDB();
 
+//routes 
+app.use("/api/items", itemRouter);
 app.post('/signup/', SignUp);
 app.post('/login/', LogIn);
 app.get('/home/', auth_middleware, (req, res) => {
