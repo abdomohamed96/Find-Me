@@ -46,4 +46,13 @@ const item_verify = {
         owner_id: Joi.number(),
     })
 }
-export { client, user_verify, item_verify };
+
+const notification_verify = {
+    postNotification_: Joi.object({
+        sender_id: Joi.number().required(),
+        reciever_id: Joi.number().required(),
+        notification_date: Joi.date().default(new Date()),
+        description:Joi.string().required(),
+    })
+}
+export { client, user_verify, item_verify, notification_verify };

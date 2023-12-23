@@ -2,7 +2,7 @@ import { client, item_verify } from "../models/data-model.js";
 async function postItem(req, res) {
     try {
         const data = req.body;
-        const { error } = item_verify.postItem.validate(data, { abortEarly: false });
+        const { error } = item_verify.postItem.validate(data);
         if (error) {
             return res.status(400).send({ msg: error, status: "failed" });
         }
@@ -30,7 +30,7 @@ async function postItem(req, res) {
         } else {
             var glass_size = `'${data.glass_size}'`
         }
-        
+
         if (!data.glass_lens_type) {
             var glass_lens_type = null
         } else {
@@ -50,13 +50,13 @@ async function postItem(req, res) {
         res.status(400).send({ msg: error, status: "failed" });
     }
 }
-async function history_of_items(req,res,next){
-    try{    
-    const  q=`select * from items`;
-    const result=await client.query(q);
-    res.status(200).send({ data:result.rows, status: "success" })
-    }catch(error){
-        res.status(500).send({msg:error,status:"failed"})
+async function history_of_items(req, res, next) {
+    try {
+        const q = `select * from items`;
+        const result = await client.query(q);
+        res.status(200).send({ data: result.rows, status: "success" })
+    } catch (error) {
+        res.status(500).send({ msg: error, status: "failed" })
     }
 }
-export { postItem,history_of_items }
+export { postItem, history_of_items }
