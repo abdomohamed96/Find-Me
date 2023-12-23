@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { json } from 'express';
 import Joi from 'joi';
 import pkg from 'pg';
 const { Client } = pkg;
@@ -52,7 +53,15 @@ const notification_verify = {
         sender_id: Joi.number().required(),
         reciever_id: Joi.number().required(),
         notification_date: Joi.date().default(new Date()),
-        description:Joi.string().required(),
+        description: Joi.string().required(),
     })
 }
-export { client, user_verify, item_verify, notification_verify };
+
+const complaint_verify = {
+    post_complaints: Joi.object({
+        description: Joi.string().required(),
+        send_date: Joi.date(),
+        user_id: Joi.number().required()
+    })
+}
+export { client, user_verify, item_verify, notification_verify, complaint_verify };

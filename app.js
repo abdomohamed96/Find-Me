@@ -8,6 +8,7 @@ import { auth_middleware } from './middlewares/auth.middleware.js';
 const app = express();
 import itemRouter from './routes/itemRoute.js';
 import notificationRouter from './routes/notificationRoute.js';
+import complaintsRouter from './routes/complaintsRouter.js';
 dotenv.config({ path: './.env' });
 const PORT = process.env.PORT || 3001
 app.use(express.json());
@@ -44,6 +45,7 @@ connectDB();
 //routes 
 app.use("/api/items", itemRouter);
 app.use("/api/notifications",notificationRouter)
+app.use("/api/complaints",complaintsRouter)
 app.post('/signup/', SignUp);
 app.post('/login/', LogIn);
 app.get('/home/', auth_middleware, (req, res) => {
