@@ -51,11 +51,10 @@ async function postItem(req, res) {
     }
 }
 async function history_of_items(req,res,next){
-    try{
-        
+    try{    
     const  q=`select * from items`;
     const result=await client.query(q);
-    res.status(200).send({ data:result.rows[result.rows.length-1], status: "success" })
+    res.status(200).send({ data:result.rows, status: "success" })
     }catch(error){
         res.status(500).send({msg:error,status:"failed"})
     }
