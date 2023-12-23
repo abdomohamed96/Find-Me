@@ -11,12 +11,12 @@ export async function auth_middleware(req, res, next) {
             return res.status(401).json({ error: "Invalid token" });
         }
         const token = authHeader.split(" ")[1];
-        const { id } = jwt.verify(token, process.env.SECRET);
+        const { id, user_type } = jwt.verify(token, process.env.SECRET);
         const user = (await client.query(`select * from Users where user_id = ${id}`)).rows;
         if (user.length === 0) {
             return res.status(403).json({ error: 'User not found"' });
         }
-        req.user = user[0];
+        req.user = { ...user[0], user_type };
         next();
 
     } catch (err) {
