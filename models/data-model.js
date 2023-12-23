@@ -36,14 +36,14 @@ const item_verify = {
         item_location: Joi.string().alphanum().min(3).required(),
         item_color: Joi.string().alphanum().min(3),
         is_lost: Joi.bool().required(),
-        item_date:Joi.date().required(),
-        item_type:Joi.string().required(),
-        brand:Joi.string(),
-        version_type:Joi.string(),
-        glass_size:Joi.string(),
-        glass_lens_type:Joi.string(),
-        phone_ip:Joi.string(),
-        owner_id:Joi.number(),
+        item_date: Joi.date().required(),
+        item_type: Joi.string().required(),
+        brand: Joi.string(),
+        version_type: Joi.string(),
+        glass_size: Joi.string(),
+        glass_lens_type: Joi.string(),
+        phone_ip: Joi.string(),
+        owner_id: Joi.number(),
     })
 }
-export { client, user_verify,item_verify };
+export { client, user_verify, item_verify };

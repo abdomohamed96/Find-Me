@@ -1,8 +1,11 @@
 import { Router } from "express";
 const itemRouter = Router();
 //controllers
-import { postItem } from '../controllers/items_controller.js'
+import { postItem, history_of_items } from '../controllers/items_controller.js'
 
 //opertions 
-itemRouter.post('/', postItem)
+itemRouter.route('/')
+    .post(postItem)
+    .get(history_of_items)
+
 export default itemRouter;
