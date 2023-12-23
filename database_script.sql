@@ -517,3 +517,12 @@ on update cascade;
 
 alter table cars alter column pirce type float;
 alter table cars Rename column pirce to price;
+
+ALTER TABLE delivery
+DROP CONSTRAINT IF EXISTS delivery_transmission_check;
+ALTER TABLE delivery
+ADD CONSTRAINT delivery_transmission_check CHECK 
+(transmission IN ('Manual', 'Automatic', 'Both'));
+
+alter table delivery add column account_number bigint;
+alter table delivery add column balance float;

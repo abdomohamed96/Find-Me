@@ -89,20 +89,84 @@ async function delete_items(req, res) {
 async function update_items(req, res) {
     try {
         const { id } = req.params;
+        const data = req.body;
+        console.log(data)
         if (!parseInt(id)) {
             const err = new Error();
             err.message = "id should be number"
             throw err
         }
+        if (!data.item_color) {
+            var item_color = "";
+        }
+        else {
+            var item_color = `item_color='${data.item_color}',`
+        }
+        if (!data.brand) {
+            var brand = ""
+        } else {
+            var brand = `brand='${data.brand}',`
+        }
+        if (!data.version_type) {
+            var version_type = ""
+        } else {
+            var version_type = `version_type='${data.version_type}',`
+        }
+        if (!data.glass_size) {
+            var glass_size = ""
+        } else {
+            var glass_size = `glass_size='${data.glass_size}',`
+        }
+
+        if (!data.glass_lens_type) {
+            var glass_lens_type = ""
+        } else {
+            var glass_lens_type = `glass_lens_type='${data.glass_lens_type}',`
+        }
+        if (!data.phone_ip) {
+            var phone_ip = ""
+        } else {
+            var phone_ip = `phone_ip='${data.phone_ip}',`
+        }
+        if (!data.item_date) {
+            var item_date = ""
+        } else {
+            var item_date = `item_date='${data.item_date}',`
+        }
+        if (!data.is_lost&&data.is_lost!=false) {
+            var is_lost = ""
+        } else {
+            var is_lost = `is_lost=${data.is_lost},`
+        }
+        if (!data.item_location) {
+            var item_location = ""
+        } else {
+            var item_location = `item_location='${data.item_location}',`
+        }
+        if (!data.item_type) {
+            var item_type = ""
+        } else {
+            var item_type = `item_type='${data.item_type}',`
+        }
+        console.log(is_lost)
+        let temp = `${item_location} ${item_color} ${is_lost} ${item_date} ${item_type} ${brand} ${version_type} ${glass_size} ${glass_lens_type} ${phone_ip}`
+        let setPart = temp.trim();
+        if (setPart[setPart.length - 1] == ',') {
+            setPart = setPart.slice(0, -1)
+            console.log("hi")
+        } else
+            if (setPart[setPart[setPart.length - 1]] === " " && setPart[setPart.length - 2] === ",") {
+                setPart = setPart.slice(0, -1)
+            }
+        console.log(setPart);
         let q = `UPDATE public.items
-        SET item_location=?, item_color=?, is_lost=?, item_date=?, item_type=?, brand=?, version_type=?, glass_size=?, glass_lens_type=?, phone_ip=?, owner_id=?
-        WHERE item_id=${id};`
+        SET ${setPart} WHERE item_id=${id};`
         console.log(q)
         const result = await client.query(q)
-        return res.status(200).send({ deleted_rows: result.rowCount, status: "success" })
+        return res.status(200).send({ updated_rows: result.rowCount, status: "success" })
     } catch (error) {
         return res.status(400).send({ msg: error, status: "failed" });
 
     }
 }
-export { postItem, get_items_by_id, delete_items }
+export { postItem, get_items_by_id, delete_items, update_items }

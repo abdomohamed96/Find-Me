@@ -1,13 +1,15 @@
 import { Router } from "express";
 const itemRouter = Router();
 //controllers
-import { postItem, get_items_by_id,delete_items} from '../controllers/items_controller.js'
+import { postItem, get_items_by_id,delete_items,update_items} from '../controllers/items_controller.js'
 
 //opertions 
 itemRouter.route('/')
     .post(postItem)
     .get(get_items_by_id)
 
-itemRouter.delete('/:id',delete_items)
-//itemRouter.update('updateItem)
+itemRouter.route('/:id')
+    .delete(delete_items)
+    .patch(update_items)
+
 export default itemRouter;
