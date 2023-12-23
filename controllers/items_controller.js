@@ -58,9 +58,9 @@ async function get_items_by_id(req, res, next) {
             err.message = "you should specify the query parameter id = & found or lost for lost set lost =1"
             throw err
         }
-        let q = `select * from items where items_id=${id} and is_lost=true`;
+        let q = `select * from items where item_id=${id} and is_lost=true`;
         if (lost != "1") {
-            q = `select * from items where items_id=${id} and is_lost=false`;
+            q = `select * from items where item_id=${id} and is_lost=false`;
         }
         const result = await client.query(q);
         res.status(200).send({ data: result.rows, status: "success" })
@@ -68,4 +68,41 @@ async function get_items_by_id(req, res, next) {
         res.status(500).send({ msg: error, status: "failed" })
     }
 }
-export { postItem, get_items_by_id }
+async function delete_items(req, res) {
+    try {
+        const { id } = req.params;
+        if (!parseInt(id)) {
+            const err = new Error();
+            err.message = "id should be number"
+            throw err
+        }
+        let q = `DELETE FROM public.items WHERE item_id=${id};`
+        console.log(q)
+        const result = await client.query(q)
+        return res.status(200).send({ deleted_rows: result.rowCount, status: "success" })
+    } catch (error) {
+        return res.status(400).send({ msg: error, status: "failed" });
+
+    }
+}
+
+async function update_items(req, res) {
+    try {
+        const { id } = req.params;
+        if (!parseInt(id)) {
+            const err = new Error();
+            err.message = "id should be number"
+            throw err
+        }
+        let q = `UPDATE public.items
+        SET item_location=?, item_color=?, is_lost=?, item_date=?, item_type=?, brand=?, version_type=?, glass_size=?, glass_lens_type=?, phone_ip=?, owner_id=?
+        WHERE item_id=${id};`
+        console.log(q)
+        const result = await client.query(q)
+        return res.status(200).send({ deleted_rows: result.rowCount, status: "success" })
+    } catch (error) {
+        return res.status(400).send({ msg: error, status: "failed" });
+
+    }
+}
+export { postItem, get_items_by_id, delete_items }

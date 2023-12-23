@@ -10,14 +10,13 @@ async function postNotification(req, res) {
             data.notification_date = new Date().toJSON().split("T")[0];
         }
         if (data.reciever_id.toString() == data.sender_id.toString()) {
-            console.log("error")
             const err = new Error();
             err.message = "you are not allowed to send notification to yourself";
             throw err
         }
-        const q = `INSERT INTO public.notification(
-        sender_id, reciever_id, description, notification_date)
-        VALUES (${data.sender_id},${data.reciever_id},'${data.description}', '${data.notification_date}');`
+        const q = `INSERT INTO public.notifications(
+            sender_id, receiver_id, description, notification_date)
+            VALUES  (${data.sender_id},${data.reciever_id},'${data.description}', '${data.notification_date}');`
         await client.query(q);
         return res.status(200).send({ msg: "inserted successfully", status: "success" })
     } catch (error) {
@@ -38,9 +37,9 @@ async function get_sended_or_recieved_notification_byID(req, res) {
             err.message = "id should be number"
             throw err
         }
-        let q = `select * from notification where sender_id=${id}`;
+        let q = `select * from notifications where sender_id=${id}`;
         if (sender != '1') {
-            q = `select * from notification where reciever_id=${id}`;
+            q = `select * from notifications where receiver_id=${id}`;
         }
         const result = await client.query(q)
         return res.status(200).send({ data: result.rows, status: "success" })
@@ -57,10 +56,9 @@ async function delete_notification(req, res) {
             err.message = "id should be number"
             throw err
         }
-        let q = `DELETE FROM public.notification WHERE sender_id=${id};`
-        console.log(q)
+        let q = `DELETE FROM public.notifications WHERE sender_id=${id};`
         const result = await client.query(q)
-        return res.status(200).send({ deleted_rows: result.rowCount, status: "success"})
+        return res.status(200).send({ deleted_rows: result.rowCount, status: "success" })
     } catch (error) {
         return res.status(400).send({ msg: error, status: "failed" });
 
