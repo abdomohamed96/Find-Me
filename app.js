@@ -2,9 +2,10 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors';
 import { client } from './models/data-model.js'
-import SignUp from './controllers/signup.controller.js';
+import { AddUser } from './controllers/user.controller.js';
 import LogIn from './controllers/login.controller.js';
 import { auth_middleware } from './middlewares/auth.middleware.js';
+import { comp_router } from './routes/competition.route.js';
 
 const app = express();
 dotenv.config({ path: './.env' });
@@ -32,7 +33,7 @@ const connectDB = async () => {
         //     1,'omar','oo',0112598,'o@gmail.com','555','Male',44,'giza'
         // );
         // `)));
-        // client.query(`call add_user('ahmed','rabie',0254,'pp@gmail.com','8988','Male',44,'cairo');`)
+        // console.log( await client.query(`call add_user('ahmed','rabie',0254,'pp@gmail.com','8988','Male',44,'cairo');`));
         // await client.end()   //end connection in the end of program
     } catch (error) {
         console.log(error)
@@ -40,9 +41,12 @@ const connectDB = async () => {
 }
 connectDB();
 
-app.post('/signup/', SignUp);
+app.post('/add_user/', AddUser);
 app.post('/login/', LogIn);
-app.get('/home/', auth_middleware, (req, res) => {
+app.use(auth_middleware);
+app.get('/home/', (req, res) => {
     return res.status(200).json({ status: 'success', user_data: req.user });
-})
+});
+
+app.use('/competiton', auth_middleware, comp_router);
 
