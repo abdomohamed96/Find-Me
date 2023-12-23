@@ -21,9 +21,43 @@ async function postNotification(req, res) {
         await client.query(q);
         return res.status(200).send({ msg: "inserted successfully", status: "success" })
     } catch (error) {
-        console.log(error)
         return res.status(400).send({ msg: error, status: "failed" });
     }
 
 }
-export { postNotification }
+async function get_sended_or_recieved_notification_byID(req, res) {
+    try {
+        const { id, sender } = req.query;
+        if (!id || !sender) {
+            const err = new Error();
+            err.message = "you should specify the query parameter id = & sender or reciceve for sending set sender =1"
+            throw err
+        }
+        if(!parseInt(id)){
+            const err = new Error();
+            err.message = "id should be number"
+            throw err
+        }
+       let q = `select * from notification where sender_id=${id}`;
+        if (sender != '1') {
+            q = `select * from notification where reciever_id=${id}`;
+        }
+        const result = await client.query(q)
+        return res.status(200).send({ data: result.rows, status: "success" })
+    } catch (error) {
+        return res.status(400).send({ msg: error, status: "failed" });
+    }
+}
+async function get_recieved_notification_byID(req, res) {
+    try {
+        console.log(req.params)
+        const { id } = req.params;
+        const q = `select * from notification where recieved_id=${id}`
+        console.log(q)
+        const result = await client.query(q)
+        return res.status(200).send({ data: result.rows, status: "success" })
+    } catch (error) {
+        return res.status(400).send({ msg: error, status: "failed" });
+    }
+}
+export { postNotification, get_sended_or_recieved_notification_byID }
