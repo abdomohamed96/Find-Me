@@ -30,6 +30,21 @@ async function post_complaint(req,res){
 
     }
 }
+async function delete_complaints(req, res) {
+    try {
+        const { id } = req.params;
+        if (!parseInt(id)) {
+            const err = new Error();
+            err.message = "id should be number"
+            throw err
+        }
+        let q = `DELETE FROM public.complaints WHERE complaint_id=${id};`
+        const result = await client.query(q)
+        return res.status(200).send({ deleted_rows: result.rowCount, status: "success" })
+    } catch (error) {
+        return res.status(400).send({ msg: error, status: "failed" });
 
+    }
+}
 
-export {post_complaint}
+export {post_complaint,delete_complaints}
