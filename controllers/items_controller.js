@@ -50,13 +50,22 @@ async function postItem(req, res) {
         res.status(400).send({ msg: error, status: "failed" });
     }
 }
-async function history_of_items(req, res, next) {
+async function get_items_by_id(req, res, next) {
     try {
-        const q = `select * from items`;
+        const { id, lost } = req.query;
+        if (!id || !lost) {
+            const err = new Error();
+            err.message = "you should specify the query parameter id = & found or lost for lost set lost =1"
+            throw err
+        }
+        let q = `select * from items where items_id=${id} and is_lost=true`;
+        if (lost != "1") {
+            q = `select * from items where items_id=${id} and is_lost=false`;
+        }
         const result = await client.query(q);
         res.status(200).send({ data: result.rows, status: "success" })
     } catch (error) {
         res.status(500).send({ msg: error, status: "failed" })
     }
 }
-export { postItem, history_of_items }
+export { postItem, get_items_by_id }

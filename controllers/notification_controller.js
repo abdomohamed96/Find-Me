@@ -48,16 +48,5 @@ async function get_sended_or_recieved_notification_byID(req, res) {
         return res.status(400).send({ msg: error, status: "failed" });
     }
 }
-async function get_recieved_notification_byID(req, res) {
-    try {
-        console.log(req.params)
-        const { id } = req.params;
-        const q = `select * from notification where recieved_id=${id}`
-        console.log(q)
-        const result = await client.query(q)
-        return res.status(200).send({ data: result.rows, status: "success" })
-    } catch (error) {
-        return res.status(400).send({ msg: error, status: "failed" });
-    }
-}
+
 export { postNotification, get_sended_or_recieved_notification_byID }

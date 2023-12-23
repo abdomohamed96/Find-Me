@@ -1,12 +1,12 @@
 import { Router } from "express";
 const itemRouter = Router();
 //controllers
-import { postItem, history_of_items} from '../controllers/items_controller.js'
+import { postItem, get_items_by_id} from '../controllers/items_controller.js'
 
 //opertions 
 itemRouter.route('/')
     .post(postItem)
-    .get(history_of_items)
+    .get(get_items_by_id)
 
 //itemRouter.delete('/:id',deleteItem)
 //itemRouter.update('updateItem)
