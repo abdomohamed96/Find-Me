@@ -1,17 +1,17 @@
 import { client, complaint_verify } from "../models/data-model.js";
 /*
 create table complaints(
-	complaint_id serial primary key,
-	description varchar not null,
-	status varchar default 'in progress',
-	send_date date,
-	resolved_date date,
-	feedback varchar,
-	user_id integer not null
-	);
+    complaint_id serial primary key,
+    description varchar not null,
+    status varchar default 'in progress',
+    send_date date,
+    resolved_date date,
+    feedback varchar,
+    user_id integer not null
+    );
 */
-async function post_complaint(req,res){
-    try{
+async function post_complaint(req, res) {
+    try {
         const data = req.body;
         const { error } = complaint_verify.post_complaints.validate(data, { abortEarly: false })
         if (error) {
@@ -25,7 +25,7 @@ async function post_complaint(req,res){
             VALUES  ('${data.description}','${data.send_date}', '${data.user_id}');`
         await client.query(q);
         return res.status(200).send({ msg: "inserted successfully", status: "success" })
-    }catch(error){
+    } catch (error) {
         return res.status(400).send({ msg: error, status: "failed" });
 
     }
@@ -46,5 +46,13 @@ async function delete_complaints(req, res) {
 
     }
 }
-
-export {post_complaint,delete_complaints}
+async function get_all_complaints(req, res) {
+    try {
+        let q = `select * from complaints`;
+        const result = await client.query(q);
+        res.status(200).send({ data: result.rows, status: "success" })
+    } catch (error) {
+        res.status(500).send({ msg: error, status: "failed" })
+    }
+}
+export { post_complaint, delete_complaints, get_all_complaints }
