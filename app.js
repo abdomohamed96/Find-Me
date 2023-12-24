@@ -9,6 +9,7 @@ import { comp_router } from './routes/competition.route.js';
 import itemRouter from './routes/itemRoute.js';
 import notificationRouter from './routes/notificationRoute.js';
 import complaintsRouter from './routes/complaintsRouter.js';
+import productRouter from './routes/product.route.js';
 
 const app = express();
 dotenv.config({ path: './.env' });
@@ -52,7 +53,8 @@ app.get('/home/', (req, res) => {
 });
 //routes 
 app.use("/api/items", itemRouter);
-app.use("/api/notifications",notificationRouter)
-app.use("/api/complaints",complaintsRouter)
+app.use("/api/notifications", notificationRouter)
+app.use("/api/complaints", complaintsRouter)
+app.use("/api/products", productRouter)
 app.use('/competiton', auth_middleware, comp_router);
 

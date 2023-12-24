@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 
 
 async function AddUser(req, res) {
+    console.log("hi")
     try {
         const data = req.body;
         if (data.user_type === 'Delivery') {

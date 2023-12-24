@@ -108,9 +108,8 @@ const notification_verify = {
 }
 
 const complaint_verify = {
-    post_complaints: Joi.object({
+        post_complaints: Joi.object({
         description: Joi.string().required(),
-        send_date: Joi.date(),
         user_id: Joi.number().required()
     })
 }
@@ -124,5 +123,28 @@ const userTrip_verify = {
         rate: Joi.number().precision(2)
     })
 }
+/**
+ * 
+ * 	create table products(
+		product_id serial primary key,
+		price float not null,
+		product_type varchar not null,
+		brand varchar,
+		sold_date date,
+		discount_id int,
+		foreign key (discount_id) references discounts,
+		customer_id int,
+		center_id int not null,
+		foreign key (center_id) references centers
+	);
+ */
+const product_verify = {
+    postProduct: Joi.object({
+        price:  Joi.number().required(),
+        product_type: Joi.string().valid('laptop', 'phone', 'glass','watch').required(),
+        brand: Joi.string(),
+        center_id: Joi.number().required(),
+    })
+}
 
-export { client, user_verify, comp_verify, item_verify, notification_verify, complaint_verify, userTrip_verify };
+export { client, user_verify, comp_verify, item_verify, notification_verify, complaint_verify, userTrip_verify,product_verify };

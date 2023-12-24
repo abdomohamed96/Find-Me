@@ -526,3 +526,12 @@ ADD CONSTRAINT delivery_transmission_check CHECK
 
 alter table delivery add column account_number bigint;
 alter table delivery add column balance float;
+
+ALTER TABLE delivery DROP CONSTRAINT IF EXISTS delivery_transmission_check;
+ALTER TABLE delivery DROP CONSTRAINT IF EXISTS transmission;
+-- Adding a CHECK constraint to ensure transmission values are within the specified range
+ALTER TABLE delivery ADD CONSTRAINT delivery_transmission_check CHECK (transmission IN ('Manual', 'Automatic', 'Both'));
+
+
+ALTER TABLE products ADD CONSTRAINT check_typeof_product CHECK (product_type IN ('laptop', 'phone', 'glass','watch'));
+

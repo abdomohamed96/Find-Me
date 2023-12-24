@@ -6,9 +6,7 @@ async function postItem(req, res) {
         if (error) {
             return res.status(400).send({ msg: error, status: "failed" });
         }
-        if (!data.owner_id) {
-            data.owner_id = null
-        }
+        data.owner_id=data.owner_id??null;
         if (!data.item_color) {
             var item_color = null
         }
