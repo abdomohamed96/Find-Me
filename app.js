@@ -6,11 +6,11 @@ import { AddUser } from './controllers/user.controller.js';
 import LogIn from './controllers/login.controller.js';
 import { auth_middleware } from './middlewares/auth.middleware.js';
 import { comp_router } from './routes/competition.route.js';
-
-const app = express();
 import itemRouter from './routes/itemRoute.js';
 import notificationRouter from './routes/notificationRoute.js';
 import complaintsRouter from './routes/complaintsRouter.js';
+
+const app = express();
 dotenv.config({ path: './.env' });
 const PORT = process.env.PORT || 3001
 app.use(express.json());

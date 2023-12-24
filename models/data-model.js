@@ -114,4 +114,15 @@ const complaint_verify = {
         user_id: Joi.number().required()
     })
 }
-export { client, user_verify, comp_verify, item_verify, notification_verify, complaint_verify };
+
+const userTrip_verify = {
+    add_trip: Joi.object({
+        driver_id:  Joi.number().integer().required(),
+        owner_id: Joi.number().integer().required(),
+        item_id: Joi.number().integer().required(),
+        distance: Joi.number().precision(3).required(),
+        rate: Joi.number().precision(2)
+    })
+}
+
+export { client, user_verify, comp_verify, item_verify, notification_verify, complaint_verify, userTrip_verify };

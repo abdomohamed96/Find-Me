@@ -30,7 +30,7 @@ async function add_comp(req, res) {
         return;
     } catch (err) {
         console.log("there is an error occured during adding new competititon");
-        res.status(400).json({ error: "there is an error occured during adding new competititon, try again" })
+        res.status(400).json({ mess: "there is an error occured during adding new competititon, try again", err })
         return;
     }
 }
@@ -48,7 +48,7 @@ async function delete_comp(req, res) {
             await client.query(`delete from competitions where searched_item = ${data.item_id} and competition_name = '${data.name}' and manager_id = ${req.user.user_id}`)
         ).rowCount;
         if (execute === 0) {
-            res.status(400).json({ err: 'there is not a competition with this name and itme item created by you' });
+            res.status(400).json({ mess: 'there is not a competition with this name and itme item created by you'});
             return;
         }
         //it can be canceled if we use like a combo box in gui which contain only user's losted items
@@ -56,7 +56,7 @@ async function delete_comp(req, res) {
         return;
     } catch (err) {
         console.log("there is an error occured during deleting competititon");
-        res.status(400).json({ error: "there is an error occured during deleting competititon, try again" })
+        res.status(400).json({ mess: "there is an error occured during deleting competititon, try again", err })
         return;
     }
 }
@@ -72,7 +72,7 @@ async function showAll(req, res) {      //show all competitons without user's co
 
     } catch (err) {
         console.log("there is an error occured during showing all competititon");
-        res.status(400).json({ error: "there is an error occured during showing all competititon, try again" })
+        res.status(400).json({ mess: "there is an error occured during showing all competititon, try again", err })
         return;
     }
 }

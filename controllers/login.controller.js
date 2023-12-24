@@ -14,28 +14,28 @@ async function LogIn(req, res) {
 
         const found_user = (await client.query(`select * from Users where email = '${data.email}';`)).rows;
         if ((found_user).length === 0) {
-            return res.status(400).json({ error: 'Invalid email or password' });
+            return res.status(400).json({ mess: 'Invalid email or password' });
         }
 
         const hashedPass = await bcrypt.compare(data.password, found_user[0].password);
         if (!hashedPass) {
-            res.status(400).json({ error: 'Invalid email or password' })
+            res.status(400).json({ mess: 'Invalid email or password' })
             return;
         }
         if (data.user_type === 'Normal_user') {
             const check_type = (await client.query(`select * from normal_users where user_id = '${found_user[0].user_id}';`)).rows;
             if ((check_type).length === 0) {
-                return res.status(400).json({ error: 'Has no permession to log in as normal user' });
+                return res.status(400).json({ mess: 'Has no permession to log in as normal user' });
             }
-        }else if(data.user_type === 'Delivery') {
+        } else if (data.user_type === 'Delivery') {
             const check_type = (await client.query(`select * from Delivery where user_id = '${found_user[0].user_id}';`)).rows;
             if ((check_type).length === 0) {
-                return res.status(400).json({ error: 'Has no permession to log in as delivery' });
+                return res.status(400).json({ mess: 'Has no permession to log in as delivery' });
             }
-        }else{
+        } else {
             const check_type = (await client.query(`select * from employee where user_id = '${found_user[0].user_id}';`)).rows;
             if ((check_type).length === 0) {
-                return res.status(400).json({ error: 'Has no permession to log in as employee' });
+                return res.status(400).json({ mess: 'Has no permession to log in as employee' });
             }
         }
 
@@ -44,7 +44,7 @@ async function LogIn(req, res) {
 
     } catch (err) {
         console.log('there is error happenning while logging up');
-        return res.status(400).json({ error: "An error occurred while logging in your account. Please try again." });
+        return res.status(400).json({ mess: "An error occurred while logging in your account. Please try again.", err });
     }
 }
 

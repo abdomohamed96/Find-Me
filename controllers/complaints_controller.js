@@ -15,7 +15,7 @@ async function post_complaint(req, res) {
         const data = req.body;
         const { error } = complaint_verify.post_complaints.validate(data, { abortEarly: false })
         if (error) {
-            return res.status(400).send({ msg: error, status: "failed" });
+            return res.status(400).send({ msg: error.details[0].message, status: "failed" });
         }
         if (!data.send_date) {
             data.send_date = new Date().toJSON().split("T")[0];

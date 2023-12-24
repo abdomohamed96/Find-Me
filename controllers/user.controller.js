@@ -35,14 +35,14 @@ async function AddUser(req, res) {
         if (data.user_type === 'Normal_user') {
             await client.query(`insert into normal_users (user_id) values(${id})`);
         } else if (data.user_type === 'Delivery') {
-            await client.query(`insert into delivery values(${id},${data.transmission},${data.price_km},true,${data.account_number},${data.balance})`);
+            await client.query(`insert into delivery values(${id},'${data.transmission}',${data.price_km},true,${data.account_number},${data.balance})`);
         } else {
             await client.query(`insert into employee values (${id},${data.salary},${data.working_hours},${data.centerID ?? null})`);
         }
 
         res.status(202).json({ status: 'success' });
     } catch (err) {
-        res.status(400).json({ error: "An error occurred while creating your account. Please try again." });
+        res.status(400).json({ mess: "An error occurred while creating your account. Please try again.", err });
         console.log('there is error happenning while signning up');
         return;
     }
