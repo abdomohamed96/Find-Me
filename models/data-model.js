@@ -108,7 +108,7 @@ const notification_verify = {
 }
 
 const complaint_verify = {
-        post_complaints: Joi.object({
+    post_complaints: Joi.object({
         description: Joi.string().required(),
         user_id: Joi.number().required()
     })
@@ -116,7 +116,7 @@ const complaint_verify = {
 
 const userTrip_verify = {
     add_trip: Joi.object({
-        driver_id:  Joi.number().integer().required(),
+        driver_id: Joi.number().integer().required(),
         owner_id: Joi.number().integer().required(),
         item_id: Joi.number().integer().required(),
         distance: Joi.number().precision(3).required(),
@@ -126,25 +126,37 @@ const userTrip_verify = {
 /**
  * 
  * 	create table products(
-		product_id serial primary key,
-		price float not null,
-		product_type varchar not null,
-		brand varchar,
-		sold_date date,
-		discount_id int,
-		foreign key (discount_id) references discounts,
-		customer_id int,
-		center_id int not null,
-		foreign key (center_id) references centers
-	);
+        product_id serial primary key,
+        price float not null,
+        product_type varchar not null,
+        brand varchar,
+        sold_date date,
+        discount_id int,
+        foreign key (discount_id) references discounts,
+        customer_id int,
+        center_id int not null,
+        foreign key (center_id) references centers
+    );
  */
 const product_verify = {
     postProduct: Joi.object({
-        price:  Joi.number().required(),
-        product_type: Joi.string().valid('laptop', 'phone', 'glass','watch').required(),
+        price: Joi.number().required(),
+        product_type: Joi.string().valid('laptop', 'phone', 'glass', 'watch').required(),
         brand: Joi.string(),
         center_id: Joi.number().required(),
     })
 }
-
-export { client, user_verify, comp_verify, item_verify, notification_verify, complaint_verify, userTrip_verify,product_verify };
+// create table discounts(
+//     discount_id serial primary key,
+//     start_date date not null,
+//     end_date date not null,
+//     percentage float not null
+// );
+const discount_verify = {
+    postDiscount: Joi.object({
+        start_date: Joi.date().required(),
+        end_date: Joi.date().required(),
+        percentage: Joi.number().required()
+    })
+}
+export { client, user_verify, comp_verify, item_verify, notification_verify, complaint_verify, userTrip_verify, product_verify, discount_verify };

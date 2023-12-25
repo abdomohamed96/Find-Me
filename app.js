@@ -10,6 +10,7 @@ import itemRouter from './routes/itemRoute.js';
 import notificationRouter from './routes/notificationRoute.js';
 import complaintsRouter from './routes/complaintsRouter.js';
 import productRouter from './routes/product.route.js';
+import discountsRouter from './routes/discounts.route.js';
 
 const app = express();
 dotenv.config({ path: './.env' });
@@ -47,7 +48,7 @@ connectDB();
 
 app.post('/add_user/', AddUser);
 app.post('/login/', LogIn);
-app.use(auth_middleware);
+//app.use(auth_middleware);
 app.get('/home/', (req, res) => {
     return res.status(200).json({ status: 'success', user_data: req.user });
 });
@@ -56,5 +57,6 @@ app.use("/api/items", itemRouter);
 app.use("/api/notifications", notificationRouter)
 app.use("/api/complaints", complaintsRouter)
 app.use("/api/products", productRouter)
+app.use("/api/discounts", discountsRouter)
 app.use('/competiton', auth_middleware, comp_router);
 
