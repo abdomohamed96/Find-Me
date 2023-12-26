@@ -18,49 +18,51 @@ const client = new Client({
 
 
 const user_verify = {
-    Normal_user: Joi.object({
-        fname: Joi.string().alphanum().min(3).max(50).required(),
-        lname: Joi.string().alphanum().min(3).max(50).required(),
-        phone_number: Joi.number().integer().required(),
-        email: Joi.string().max(50).email().required(),
-        password: Joi.string().min(8).required(),
-        confirm_password: Joi.string().min(8).valid(Joi.ref('password')).required(),
-        sex: Joi.string().valid('Male', 'Female').required(),
-        age: Joi.number().integer(),
-        location: Joi.string().alphanum(),
-        user_type: Joi.string().valid('Normal_user', 'Delivery', 'Employee').required()
-    }),
-    Delivery: Joi.object({
-        fname: Joi.string().alphanum().min(3).max(50).required(),
-        lname: Joi.string().alphanum().min(3).max(50).required(),
-        phone_number: Joi.number().integer().required(),
-        email: Joi.string().max(50).email().required(),
-        password: Joi.string().min(8).required(),
-        confirm_password: Joi.string().min(8).valid(Joi.ref('password')).required(),
-        sex: Joi.string().valid('Male', 'Female').required(),
-        age: Joi.number().integer(),
-        location: Joi.string().alphanum(),
-        user_type: Joi.string().valid('Normal_user', 'Delivery', 'Employee').required(),
-        transmission: Joi.string().valid('Manual', 'Automatic', 'Both').required(),
-        price_km: Joi.number().precision(3).required(),
-        account_number: Joi.number().integer().required(),
-        balance: Joi.number().integer().required()
-    }),
-    Employee: Joi.object({
-        fname: Joi.string().alphanum().min(3).max(50).required(),
-        lname: Joi.string().alphanum().min(3).max(50).required(),
-        phone_number: Joi.number().integer().required(),
-        email: Joi.string().max(50).email().required(),
-        password: Joi.string().min(8).required(),
-        confirm_password: Joi.string().min(8).valid(Joi.ref('password')).required(),
-        sex: Joi.string().valid('Male', 'Female').required(),
-        age: Joi.number().integer(),
-        location: Joi.string().alphanum(),
-        user_type: Joi.string().valid('Normal_user', 'Delivery', 'Employee').required(),
-        salary: Joi.number().integer().required(),
-        working_hours: Joi.number().integer().required(),
-        centerID: Joi.number().integer()
-    }),
+    add: {
+        Normal_user: Joi.object({
+            fname: Joi.string().min(3).max(50).required(),
+            lname: Joi.string().min(3).max(50).required(),
+            phone_number: Joi.number().integer().required(),
+            email: Joi.string().max(50).email().required(),
+            password: Joi.string().min(8).required(),
+            confirm_password: Joi.string().min(8).valid(Joi.ref('password')).required(),
+            sex: Joi.string().valid('Male', 'Female').required(),
+            age: Joi.number().integer(),
+            location: Joi.string().required(),
+            user_type: Joi.string().valid('Normal_user', 'Delivery', 'Employee').required()
+        }),
+        Delivery: Joi.object({
+            transmission: Joi.string().valid('Manual', 'Automatic', 'Both').required(),
+            price_km: Joi.number().precision(3).required(),
+            account_number: Joi.number().integer().required(),
+            balance: Joi.number().integer().required()
+        }),
+        Employee: Joi.object({
+            salary: Joi.number().integer().required(),
+            working_hours: Joi.number().integer().required(),
+            centerID: Joi.number().integer(),
+            isAdmin: Joi.boolean().required()
+        })
+    },
+    update: {
+        user: Joi.object({
+            fname: Joi.string().min(3).max(50),
+            lname: Joi.string().min(3).max(50),
+            phone_number: Joi.number().integer(),
+            email: Joi.string().max(50).email(),
+            password: Joi.string().min(8),
+            sex: Joi.string().valid('Male', 'Female'),
+            age: Joi.number().integer(),
+            location: Joi.string(),
+        }),
+        Delivery: Joi.object({
+            transmission: Joi.string().valid('Manual', 'Automatic', 'Both'),
+            price_km: Joi.number().precision(3),
+            account_number: Joi.number().integer(),
+            balance: Joi.number().integer(),
+            is_available: Joi.any()
+        })
+    },
     logIn: Joi.object({
         email: Joi.string().max(50).email().required(),
         password: Joi.string().min(8).required(),
@@ -71,21 +73,28 @@ const user_verify = {
 
 const comp_verify = {
     add_comp: Joi.object({
-        name: Joi.string().min(5).alphanum().required(),
-        item_id: Joi.number().integer().required(),
-        duration: Joi.number().integer().required(),    //days from start date to end date
+        name: Joi.string().min(5).required(),
+        item_id: Joi.number().integer().positive().required(),
+        duration: Joi.number().integer().positive().required(),    //days from start date to end date
         description: Joi.string().min(10).required(),
-        price: Joi.number().precision(3).required()
+        price: Joi.number().precision(3).positive().required()
     }),
     del_comp: Joi.object({
-        item_id: Joi.number().integer().required(),
-        name: Joi.string().min(5).alphanum().required()
+        item_id: Joi.number().integer().positive().required(),
+        name: Joi.string().min(5).required()
+    }),
+    update_comp: Joi.object({
+        name: Joi.string().min(5).required(),
+        item_id: Joi.number().integer().positive().required(),
+        duration: Joi.number().positive().integer(),    //days from start date to end date
+        description: Joi.string().min(10),
+        price: Joi.number().precision(3).positive()
     })
 }
 const item_verify = {
     postItem: Joi.object({
-        item_location: Joi.string().alphanum().min(3).required(),
-        item_color: Joi.string().alphanum().min(3),
+        item_location: Joi.string().min(3).required(),
+        item_color: Joi.string().min(3),
         is_lost: Joi.bool().required(),
         item_date: Joi.date().required(),
         item_type: Joi.string().required(),
@@ -117,11 +126,29 @@ const complaint_verify = {
 
 const userTrip_verify = {
     add_trip: Joi.object({
-        driver_id:  Joi.number().integer().required(),
-        owner_id: Joi.number().integer().required(),
-        item_id: Joi.number().integer().required(),
-        distance: Joi.number().precision(3).required(),
-        rate: Joi.number().precision(2)
+        driver_id: Joi.number().integer().positive().required(),
+        owner_id: Joi.number().integer().positive().required(),
+        item_id: Joi.number().integer().positive().required(),
+        distance: Joi.number().precision(2).positive().required(),
+        rate: Joi.any(),
+        paid: Joi.any()
+    }),
+    normal_edit: Joi.object({       //validation for data when normal user update the rate
+        item_id: Joi.number().integer().positive().required(),
+        rate: Joi.number().precision(2).less(10.00).positive().required(),
+        driver_id: Joi.any(),
+        owner_id: Joi.any(),
+        distance: Joi.any(),
+        paid: Joi.any()
+
+    }),
+    emp_edit: Joi.object({
+        item_id: Joi.number().integer().positive().required(),
+        driver_id: Joi.number().integer().positive(),
+        distance: Joi.number().precision(2).positive(),
+        owner_id: Joi.any(),
+        rate: Joi.any(),
+        paid: Joi.any()
     })
 }
 

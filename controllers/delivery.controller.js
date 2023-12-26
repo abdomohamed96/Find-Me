@@ -1,11 +1,11 @@
-import { client } from "../models/data-model";
+import { client } from "../models/data-model.js";
 
 async function get_available_deliv(req, res) {
     try {
         const delivery_data = (await client.query(`
         select 	user_id,transmission,price_km,avg(rate) as "overall rate"	from (delivery as d left outer join user_trips as t on d.user_id = t.driver_id) 
         where d.is_available = true
-        group by price_km;
+        group by user_id;
         `)).rows;
         res.status(200).json({ status: 'success', delivery_data });
         return;
