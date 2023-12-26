@@ -5,7 +5,12 @@ import { auth_middleware } from "../middlewares/auth.middleware.js";
 import permission from "../middlewares/permission.middleware.js";
 
 
+<<<<<<< HEAD
 async function AddUser(req, res) {      //(sign up for normal user ,deliveries) for employees: done by admin(other employees)
+=======
+async function AddUser(req, res) {
+    console.log("hi")
+>>>>>>> a773d22d361fe7b3aafa727b9faaa68b0c80f568
     try {
         let base_att = ['fname', 'lname', 'phone_number', 'email', 'password', 'confirm_password',
             'sex', 'age', 'location', 'user_type'];

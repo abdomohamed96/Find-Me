@@ -119,13 +119,13 @@ const notification_verify = {
 const complaint_verify = {
     post_complaints: Joi.object({
         description: Joi.string().required(),
-        send_date: Joi.date(),
         user_id: Joi.number().required()
     })
 }
 
 const userTrip_verify = {
     add_trip: Joi.object({
+<<<<<<< HEAD
         driver_id: Joi.number().integer().positive().required(),
         owner_id: Joi.number().integer().positive().required(),
         item_id: Joi.number().integer().positive().required(),
@@ -149,7 +149,49 @@ const userTrip_verify = {
         owner_id: Joi.any(),
         rate: Joi.any(),
         paid: Joi.any()
+=======
+        driver_id: Joi.number().integer().required(),
+        owner_id: Joi.number().integer().required(),
+        item_id: Joi.number().integer().required(),
+        distance: Joi.number().precision(3).required(),
+        rate: Joi.number().precision(2)
+>>>>>>> a773d22d361fe7b3aafa727b9faaa68b0c80f568
     })
 }
-
-export { client, user_verify, comp_verify, item_verify, notification_verify, complaint_verify, userTrip_verify };
+/**
+ * 
+ * 	create table products(
+        product_id serial primary key,
+        price float not null,
+        product_type varchar not null,
+        brand varchar,
+        sold_date date,
+        discount_id int,
+        foreign key (discount_id) references discounts,
+        customer_id int,
+        center_id int not null,
+        foreign key (center_id) references centers
+    );
+ */
+const product_verify = {
+    postProduct: Joi.object({
+        price: Joi.number().required(),
+        product_type: Joi.string().valid('laptop', 'phone', 'glass', 'watch').required(),
+        brand: Joi.string(),
+        center_id: Joi.number().required(),
+    })
+}
+// create table discounts(
+//     discount_id serial primary key,
+//     start_date date not null,
+//     end_date date not null,
+//     percentage float not null
+// );
+const discount_verify = {
+    postDiscount: Joi.object({
+        start_date: Joi.date().required(),
+        end_date: Joi.date().required(),
+        percentage: Joi.number().required()
+    })
+}
+export { client, user_verify, comp_verify, item_verify, notification_verify, complaint_verify, userTrip_verify, product_verify, discount_verify };

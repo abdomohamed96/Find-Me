@@ -17,9 +17,7 @@ async function post_complaint(req, res) {
         if (error) {
             return res.status(400).send({ msg: error.details[0].message, status: "failed" });
         }
-        if (!data.send_date) {
-            data.send_date = new Date().toJSON().split("T")[0];
-        }
+        data.send_date = new Date().toJSON().split("T")[0];
         const q = `INSERT INTO public.complaints(
             description, send_date,user_id)
             VALUES  ('${data.description}','${data.send_date}', '${data.user_id}');`
