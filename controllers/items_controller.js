@@ -131,7 +131,7 @@ async function update_items(req, res) {
         } else {
             var item_date = `item_date='${data.item_date}',`
         }
-        if (!data.is_lost&&data.is_lost!=false) {
+        if (!data.is_lost && data.is_lost!=false) {
             var is_lost = ""
         } else {
             var is_lost = `is_lost=${data.is_lost},`

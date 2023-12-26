@@ -17,6 +17,10 @@ export async function auth_middleware(req, res, next) {
             return res.status(403).json({ error: 'User not found"' });
         }
         req.user = { ...user[0], user_type };
+        if (user_type === 'Employee') {
+            const is_admin = (await client.query(`select is_admin from employee where user_id = ${id};`)).rows[0].is_admin;
+            req.user = { ...req.user, is_admin };
+        }
         next();
 
     } catch (err) {

@@ -1,7 +1,7 @@
 
 
 const permission = {
-    normal_user: async function (req, res) {
+    normal_user: async function (req, res,next) {
         if (!req.user) {
             res.status(400).json({ status: 'failed', err: 'you need to login' });
             return;
@@ -10,8 +10,9 @@ const permission = {
             res.status(403).json({ error: " You are not a normal user."});
             return ;
         }
+        next();
     },
-    employee: async function (req, res) {
+    employee: async function (req, res,next) {
         if (!req.user) {
             res.status(400).json({ status: 'failed', err: 'you need to login' });
             return;
@@ -20,8 +21,9 @@ const permission = {
             res.status(403).json({ error: " You are not an employee."});
             return ;
         }
+        next();
     },
-    delivery: async function (req, res) {
+    delivery: async function (req, res,next) {
         if (!req.user) {
             res.status(400).json({ status: 'failed', err: 'you need to login' });
             return;
@@ -30,6 +32,7 @@ const permission = {
             res.status(403).json({ error: " You are not a delivery."});
             return ;
         }
+        next();
     },
 };
 
