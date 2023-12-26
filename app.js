@@ -9,14 +9,11 @@ import { comp_router } from './routes/competition.route.js';
 import itemRouter from './routes/itemRoute.js';
 import notificationRouter from './routes/notificationRoute.js';
 import complaintsRouter from './routes/complaintsRouter.js';
-<<<<<<< HEAD
 import user_trip_Route from './routes/userTrip.route.js';
 import { get_available_deliv } from './controllers/delivery.controller.js';
 import userRoute from './routes/user.route.js';
-=======
 import productRouter from './routes/product.route.js';
 import discountsRouter from './routes/discounts.route.js';
->>>>>>> a773d22d361fe7b3aafa727b9faaa68b0c80f568
 
 const app = express();
 dotenv.config({ path: './.env' });
@@ -63,13 +60,10 @@ app.get('/home/', (req, res) => {
 app.use("/api/items", itemRouter);
 app.use("/api/notifications", notificationRouter)
 app.use("/api/complaints", complaintsRouter)
-<<<<<<< HEAD
 app.use('/competiton', comp_router);
 app.use('/userTrip', user_trip_Route);
 app.get('/Avai_delivery',get_available_deliv);
-=======
 app.use("/api/products", productRouter)
 app.use("/api/discounts", discountsRouter)
 app.use('/competiton', auth_middleware, comp_router);
->>>>>>> a773d22d361fe7b3aafa727b9faaa68b0c80f568
 
