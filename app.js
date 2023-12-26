@@ -2,7 +2,6 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors';
 import { client } from './models/data-model.js'
-import { AddUser } from './controllers/user.controller.js';
 import LogIn from './controllers/login.controller.js';
 import { auth_middleware } from './middlewares/auth.middleware.js';
 import { comp_router } from './routes/competition.route.js';

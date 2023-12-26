@@ -125,7 +125,6 @@ const complaint_verify = {
 
 const userTrip_verify = {
     add_trip: Joi.object({
-<<<<<<< HEAD
         driver_id: Joi.number().integer().positive().required(),
         owner_id: Joi.number().integer().positive().required(),
         item_id: Joi.number().integer().positive().required(),
@@ -149,13 +148,6 @@ const userTrip_verify = {
         owner_id: Joi.any(),
         rate: Joi.any(),
         paid: Joi.any()
-=======
-        driver_id: Joi.number().integer().required(),
-        owner_id: Joi.number().integer().required(),
-        item_id: Joi.number().integer().required(),
-        distance: Joi.number().precision(3).required(),
-        rate: Joi.number().precision(2)
->>>>>>> a773d22d361fe7b3aafa727b9faaa68b0c80f568
     })
 }
 /**
