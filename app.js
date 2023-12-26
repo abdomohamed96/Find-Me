@@ -11,7 +11,7 @@ import notificationRouter from './routes/notificationRoute.js';
 import complaintsRouter from './routes/complaintsRouter.js';
 import productRouter from './routes/product.route.js';
 import discountsRouter from './routes/discounts.route.js';
-
+import competitorRouter from './routes/competitor.route.js';
 const app = express();
 dotenv.config({ path: './.env' });
 const PORT = process.env.PORT || 3001
@@ -48,7 +48,7 @@ connectDB();
 
 app.post('/add_user/', AddUser);
 app.post('/login/', LogIn);
-//app.use(auth_middleware);
+app.use(auth_middleware);
 app.get('/home/', (req, res) => {
     return res.status(200).json({ status: 'success', user_data: req.user });
 });
@@ -58,5 +58,6 @@ app.use("/api/notifications", notificationRouter)
 app.use("/api/complaints", complaintsRouter)
 app.use("/api/products", productRouter)
 app.use("/api/discounts", discountsRouter)
+app.use("/api/competitors", competitorRouter)
 app.use('/competiton', auth_middleware, comp_router);
 

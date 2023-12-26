@@ -535,3 +535,84 @@ ALTER TABLE delivery ADD CONSTRAINT delivery_transmission_check CHECK (transmiss
 
 ALTER TABLE products ADD CONSTRAINT check_typeof_product CHECK (product_type IN ('laptop', 'phone', 'glass','watch'));
 
+-- PROCEDURE: public.add_user(character varying, character varying, integer, character varying, text, character varying, integer, character varying)
+
+-- DROP PROCEDURE IF EXISTS public.add_user(character varying, character varying, integer, character varying, text, character varying, integer, character varying);
+
+CREATE OR REPLACE PROCEDURE public.add_user(
+	IN fname character varying,
+	IN lname character varying,
+	IN phone_number integer,
+	IN email character varying,
+	IN password text,
+	IN sex character varying,
+	IN age integer,
+	IN location character varying)
+LANGUAGE 'sql'
+AS $BODY$
+insert into users ("fname","lname","phone_number","email","password","sex","age","location") 
+values(
+	fname,lname,phone_number,email,password,sex,age,location
+);
+$BODY$;
+ALTER PROCEDURE public.add_user(character varying, character varying, integer, character varying, text, character varying, integer, character varying)
+    OWNER TO postgres;
+
+CREATE OR REPLACE FUNCTION public.pay(
+	userid integer,
+	delivid integer,
+	amount numeric)
+    RETURNS boolean
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE
+    Usercurrent_balance NUMERIC;
+	Service	NUMERIC;
+
+BEGIN
+   
+    SELECT balance INTO Usercurrent_balance FROM normal_users as u WHERE u.user_id = Userid;
+	Service := 50;	--center service for finding the losted item
+	
+
+    IF Usercurrent_balance >= amount+Service THEN
+       
+        UPDATE normal_users as u SET balance = balance - amount - Service WHERE u.user_id = Userid;
+		UPDATE delivery as d SET balance = balance + amount,is_available = true WHERE d.user_id = Delivid;
+		UPDATE centers as c SET balance = balance + Service 
+		WHERE c.center_location IN (SELECT location FROM users as u where u.user_id = userid);
+																					   
+        RETURN TRUE; 
+    ELSE
+        RETURN FALSE; 
+    END IF;
+END;
+$BODY$;
+
+ALTER FUNCTION public.pay(integer, integer, numeric)
+    OWNER TO postgres;
+
+-- PROCEDURE: public.add_comp(integer, character varying, date, date, character varying, double precision, integer, integer)
+
+-- DROP PROCEDURE IF EXISTS public.add_comp(integer, character varying, date, date, character varying, double precision, integer, integer);
+
+CREATE OR REPLACE PROCEDURE public.add_comp(
+	IN searched_item integer,
+	IN competition_name character varying,
+	IN start_date date,
+	IN end_date date,
+	IN description character varying,
+	IN price double precision,
+	IN manager_id integer,
+	IN winner_id integer)
+LANGUAGE 'sql'
+AS $BODY$
+insert into competitions ("searched_item","competition_name","start_date","end_date","description","price","manager_id","winner_id") 
+values(
+	searched_item,competition_name,start_date,end_date,description,price,manager_id,winner_id
+);
+$BODY$;
+ALTER PROCEDURE public.add_comp(integer, character varying, date, date, character varying, double precision, integer, integer)
+    OWNER TO postgres;

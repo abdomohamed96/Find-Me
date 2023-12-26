@@ -6,12 +6,12 @@ import bcrypt from 'bcrypt';
 async function LogIn(req, res) {
     try {
         const data = req.body;
+
         const { error } = user_verify.logIn.validate(data, { abortEarly: false });
         if (error) {
             return res.status(400).json({ err: error.details[0].message });
 
         }
-
         const found_user = (await client.query(`select * from Users where email = '${data.email}';`)).rows;
         if ((found_user).length === 0) {
             return res.status(400).json({ mess: 'Invalid email or password' });
@@ -38,7 +38,7 @@ async function LogIn(req, res) {
                 return res.status(400).json({ mess: 'Has no permession to log in as employee' });
             }
         }
-
+        console.log(data)
         const token = Jwt.sign({ id: found_user[0].user_id, user_type: data.user_type }, process.env.SECRET, { expiresIn: process.env.EXPIRE });
         return res.status(201).json({ message: "User looged in successfully", token });
 

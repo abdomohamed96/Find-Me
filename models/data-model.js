@@ -123,21 +123,7 @@ const userTrip_verify = {
         rate: Joi.number().precision(2)
     })
 }
-/**
- * 
- * 	create table products(
-        product_id serial primary key,
-        price float not null,
-        product_type varchar not null,
-        brand varchar,
-        sold_date date,
-        discount_id int,
-        foreign key (discount_id) references discounts,
-        customer_id int,
-        center_id int not null,
-        foreign key (center_id) references centers
-    );
- */
+
 const product_verify = {
     postProduct: Joi.object({
         price: Joi.number().required(),
@@ -146,12 +132,7 @@ const product_verify = {
         center_id: Joi.number().required(),
     })
 }
-// create table discounts(
-//     discount_id serial primary key,
-//     start_date date not null,
-//     end_date date not null,
-//     percentage float not null
-// );
+
 const discount_verify = {
     postDiscount: Joi.object({
         start_date: Joi.date().required(),
@@ -159,4 +140,12 @@ const discount_verify = {
         percentage: Joi.number().required()
     })
 }
-export { client, user_verify, comp_verify, item_verify, notification_verify, complaint_verify, userTrip_verify, product_verify, discount_verify };
+
+const competitor_verify = {
+    post_competitor: Joi.object({
+        user_id: Joi.number().required(),
+        item_id: Joi.number().required(),
+    })
+}
+
+export { client, user_verify, comp_verify, item_verify, notification_verify, complaint_verify, userTrip_verify, product_verify, discount_verify, competitor_verify };
