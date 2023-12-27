@@ -640,3 +640,8 @@ drop table who_drive;
 alter table user_trips add column car_id integer;
 alter table user_trips add constraint car_user_trip_fk foreign key(car_id) references cars(car_id) 
 on update cascade on delete set null;
+
+
+ALTER TABLE complaints
+ADD CONSTRAINT statusCheck CHECK 
+(status IN ('in_progress', 'resolved'));

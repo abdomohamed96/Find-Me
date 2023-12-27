@@ -119,7 +119,6 @@ const notification_verify = {
 const complaint_verify = {
     post_complaints: Joi.object({
         description: Joi.string().required(),
-        user_id: Joi.number().required()
     })
 }
 
