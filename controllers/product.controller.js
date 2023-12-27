@@ -1,30 +1,12 @@
+import { compareSync } from "bcrypt";
 import { client, product_verify } from "../models/data-model.js";
 
-/**
- * 
- * 	create table products(
-		product_id serial primary key,
-		price float not null,
-		product_type varchar not null,
-		brand varchar,
-		sold_date date,
-		discount_id int,
-		foreign key (discount_id) references discounts,
-		customer_id int,
-		center_id int not null,
-		foreign key (center_id) references centers
-	);
-      price:  Joi.number().required(),
-        product_type: Joi.string().valid('laptop', 'phone', 'glass','watch').required(),
-        brand: Joi.string(),
-        center_id: Joi.number().required(),
- */
-async function post_product(req,res){
-    try{
+async function post_product(req, res) {
+    try {
         const data = req.body;
         const { error } = product_verify.postProduct.validate(data);
         if (error) {
-            return  res.status(400).json({ err: error.details[0].message });
+            return res.status(400).json({ err: error.details[0].message });
         }
         if (!data.brand) {
             var brand = null
@@ -42,7 +24,7 @@ async function post_product(req,res){
 }
 async function get_product_by_id(req, res, next) {
     try {
-        const { id}=req.params
+        const { id } = req.params
         if (!id) {
             const err = new Error();
             err.message = "you should specify the parameter id "
@@ -57,13 +39,13 @@ async function get_product_by_id(req, res, next) {
 }
 async function get_products_by_center_id(req, res, next) {
     try {
-        const { id}=req.params
+        const { id } = req.params
         if (!id) {
             const err = new Error();
             err.message = "you should specify the parameter id "
             throw err
         }
-        let q = `select * from products where center_id=${id} `;
+        let q = `select * from products where center_id=${id} and customer_id is null `;
         const result = await client.query(q);
         res.status(200).send({ data: result.rows, status: "success" })
     } catch (error) {
@@ -76,7 +58,6 @@ async function update_product(req, res) {
     try {
         const { id } = req.params;
         const data = req.body;
-        console.log(data)
         if (!parseInt(id)) {
             const err = new Error();
             err.message = "id should be number"
@@ -98,21 +79,32 @@ async function update_product(req, res) {
         } else {
             var product_type = `product_type='${data.product_type}',`
         }
-        if (!data.sold_date) {
-            var sold_date = ""
-        } else {
-            var sold_date = `sold_date='${data.sold_date}',`
-        }
-
         if (!data.discount_id) {
             var discount_id = ""
         } else {
             var discount_id = `discount_id=${data.discount_id},`
         }
-        if (!data.customer_id) {
+        let qq = `SELECT * FROM public.normal_users where user_id=${req.user.user_id}`;
+        const buyer = (await client.query(qq));
+        if (buyer.rowCount!=0) {
+            var customer_id = `customer_id=${req.user.user_id},`
+            
+            //make query to get product price
+            let product_balance = await client.query(`select * from products where product_id=${id}`)
+            if (buyer.rows[0].balance && buyer.rows[0].balance >= product_balance.rows[0].price) {
+                let q = `update public.normal_users set balance=balance-${product_balance.rows[0].price}`;
+                await client.query(q);
+                const date = new Date();
+                let tempDate= `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+                var sold_date = `sold_date='${tempDate}',`
+            } else {
+                const err = new Error();
+                err.message = "You don't have enough money";
+                throw err
+            }
+        }else {
             var customer_id = ""
-        } else {
-            var customer_id = `customer_id=${data.customer_id},`
+            var sold_date=""
         }
         if (!data.center_id) {
             var center_id = ""
@@ -123,15 +115,12 @@ async function update_product(req, res) {
         let setPart = temp.trim();
         if (setPart[setPart.length - 1] == ',') {
             setPart = setPart.slice(0, -1)
-            console.log("hi")
         } else
             if (setPart[setPart[setPart.length - 1]] === " " && setPart[setPart.length - 2] === ",") {
                 setPart = setPart.slice(0, -1)
             }
-        console.log(setPart);
         let q = `UPDATE public.products
         SET ${setPart} WHERE product_id=${id};`
-        console.log(q)
         const result = await client.query(q)
         return res.status(200).send({ updated_rows: result.rowCount, status: "success" })
     } catch (error) {
@@ -140,19 +129,6 @@ async function update_product(req, res) {
     }
 }
 
-/**
- * 
- * 		product_id serial primary key,
-		price float not null,
-		product_type varchar not null,
-		brand varchar,
-		sold_date date,
-		discount_id int,
-		foreign key (discount_id) references discounts,
-		customer_id int,
-		center_id int not null,
-		foreign key (center_id) references centers
- */
 async function delete_product(req, res) {
     try {
         const { id } = req.params;
@@ -171,4 +147,4 @@ async function delete_product(req, res) {
     }
 }
 
-export {post_product,get_product_by_id,get_products_by_center_id,update_product,delete_product}
+export { post_product, get_product_by_id, get_products_by_center_id, update_product, delete_product }

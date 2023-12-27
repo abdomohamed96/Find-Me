@@ -375,7 +375,7 @@ ALTER TABLE complaints
 ADD CONSTRAINT complaints_user_fk
 FOREIGN KEY (user_id)
 REFERENCES normal_users (user_id)
-on delete set null
+on delete cascade
 on update cascade;
 
 ALTER TABLE products
@@ -616,3 +616,27 @@ values(
 $BODY$;
 ALTER PROCEDURE public.add_comp(integer, character varying, date, date, character varying, double precision, integer, integer)
     OWNER TO postgres;
+
+
+ALTER TABLE complaints
+ADD CONSTRAINT complaints_user_foregin_k
+FOREIGN KEY (user_id)
+REFERENCES users (user_id)
+on delete cascade
+on update cascade;
+
+alter table products drop column center_id;
+alter table products add column center_id int references centers; 
+
+ALTER TABLE products
+ADD CONSTRAINT products_center_fk
+FOREIGN KEY (center_id)
+REFERENCES centers (center_id)
+on delete set null
+on update cascade;
+
+drop table who_drive;
+
+alter table user_trips add column car_id integer;
+alter table user_trips add constraint car_user_trip_fk foreign key(car_id) references cars(car_id) 
+on update cascade on delete set null;

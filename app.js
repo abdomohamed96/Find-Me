@@ -49,7 +49,7 @@ const connectDB = async () => {
 connectDB();
 
 // app.post('/add_user/', AddUser);
-app.use('/users',userRoute);
+app.use('/users', userRoute);
 app.post('/login/', LogIn);
 app.use(auth_middleware);
 app.get('/home/', (req, res) => {
@@ -61,7 +61,7 @@ app.use("/api/notifications", notificationRouter)
 app.use("/api/complaints", complaintsRouter)
 app.use('/competiton', comp_router);
 app.use('/userTrip', user_trip_Route);
-app.get('/Avai_delivery',get_available_deliv);
+app.get('/Avai_delivery', get_available_deliv);
 app.use("/api/products", productRouter)
 app.use("/api/discounts", discountsRouter)
 app.use("/api/competitors", competitorRouter)
