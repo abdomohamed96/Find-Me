@@ -1,3 +1,5 @@
+
+
 let login_content = document.querySelector(".page-js");
 let submit_btn;
 function show_user(value) {
@@ -24,7 +26,7 @@ function show_user(value) {
     sessionStorage.setItem("user_type", "Delivery");
   }
 }
-function store_data() {
+async function store_data() {
   // sessionStorage.setItem(
   //   "email",
   //   `${document.querySelector("[type='mail']").value}`
@@ -33,24 +35,43 @@ function store_data() {
   //   "password",
   //   `${document.querySelector("[type='password']").value}`
   // );
-  fetch("https://reqres.in/api/users", {
-    method: "POST",
+  // fetch("http://localhost:3002/api/login", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     // Other headers if needed
+  //   },
+  //   body: JSON.stringify({ email: "admin2@gmail.com", password: "123456789", user_type: 'Employee' }), // Data to send in the request body
+  // })
+  //   .then((response) => console.log(response.json().token))
+  //   // .then((data) => console.log(data))
+  //   .catch((error) => console.error("Error:", error));
+
+  const response = await fetch("http://localhost:3002/api/login", {
+    method: 'POST',
     headers: {
       "Content-Type": "application/json",
       // Other headers if needed
     },
-    body: JSON.stringify({ key: "value" }), // Data to send in the request body
-  })
-    .then((response) => response.json())
-    .then((data) => console.log(data))
-    .catch((error) => console.error("Error:", error));
+    body: JSON.stringify({ email: "admin2@gmail.com", password: "123456789", user_type: 'Employee' }),
+  });
+  console.log(response)
 }
+// store_data();
 let userTypes = document.querySelector("#user_types");
 userTypes.addEventListener("change", (e) => {
   show_user(e.target.value);
   submit_btn.addEventListener("click", (e) => {
     e.preventDefault();
-    store_data();
+    // store_data();
+    fetch("http://localhost:3002/api/login", {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        // Other headers if needed
+      },
+      body: JSON.stringify({ email: "admin2@gmail.com", password: "123456789", user_type: 'Employee' }),
+    }).then((res) => { console.log(res) });
     if (sessionStorage.getItem("user_type") === "Normal_user") {
       window.location.replace("../html/main_user.html");
     } else if (sessionStorage.getItem("user_type") === "Delivery") {

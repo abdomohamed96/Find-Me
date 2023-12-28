@@ -9,11 +9,12 @@ import itemRouter from './routes/itemRoute.js';
 import notificationRouter from './routes/notificationRoute.js';
 import complaintsRouter from './routes/complaintsRouter.js';
 import user_trip_Route from './routes/userTrip.route.js';
-import { get_available_deliv } from './controllers/delivery.controller.js';
 import userRoute from './routes/user.route.js';
 import productRouter from './routes/product.route.js';
 import discountsRouter from './routes/discounts.route.js';
 import competitorRouter from './routes/competitor.route.js';
+import centerRoute from './routes/center.route.js';
+import carRoute from './routes/car.route.js';
 const app = express();
 dotenv.config({ path: './.env' });
 const PORT = process.env.PORT || 3001
@@ -49,21 +50,21 @@ const connectDB = async () => {
 connectDB();
 
 // app.post('/add_user/', AddUser);
-app.use('/users', userRoute);
-app.post('/login/', LogIn);
+app.use('/api/users', userRoute);
+app.post('/api/login/', LogIn);
 app.use(auth_middleware);
-app.get('/home/', (req, res) => {
+app.get('/api/home/', (req, res) => {
     return res.status(200).json({ status: 'success', user_data: req.user });
 });
 //routes 
 app.use("/api/items", itemRouter);
 app.use("/api/notifications", notificationRouter)
 app.use("/api/complaints", complaintsRouter)
-app.use('/competiton', comp_router);
-app.use('/userTrip', user_trip_Route);
-app.get('/Avai_delivery', get_available_deliv);
+app.use('/api/competiton', comp_router);
+app.use('/api/userTrip', user_trip_Route);
 app.use("/api/products", productRouter)
 app.use("/api/discounts", discountsRouter)
 app.use("/api/competitors", competitorRouter)
-app.use('/competiton', auth_middleware, comp_router);
+app.use('/api/center', centerRoute);
+app.use('/api/car', carRoute)
 

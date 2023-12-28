@@ -26,13 +26,22 @@ async function postNotification(req, res) {
 }
 async function get_sended_or_recieved_notification_byID(req, res) {
     try {
-        let q = "";
-        if (req.user.user_type == 'Employee') {
-            q = `select * from notifications where sender_id=${req.user.user_id} or receiver_id=${req.user.user_id}`;
-        } else {
-            q = `select * from notifications where receiver_id=${req.user.user_id}`;
-        }   
-        const result = await client.query(q)
+        const { id, sender } = req.query;
+        if (!id || !sender) {
+            const err = new Error();
+            err.message = "you should specify the query parameter id = & sender or reciceve for sending set sender =1"
+            throw err
+        }
+        if (!parseInt(id)) {
+            const err = new Error();
+            err.message = "id should be number"
+            throw err
+        }
+        let q = `select * from notifications where sender_id=${id}`;
+        if (sender != '1') {    //sender is like a flage indicates type of notifications what user want
+            q = `select * from notifications where receiver_id=${id}`;
+        }
+        const result = await client.query(q);
         return res.status(200).send({ data: result.rows, status: "success" })
     } catch (error) {
         return res.status(400).send({ msg: error, status: "failed" });

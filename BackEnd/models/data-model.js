@@ -13,7 +13,7 @@ const client = new Client({
     database: process.env.PGDATABASE,
     password: process.env.PGPASSWORD,
     port: process.env.PGPORT
-})
+});
 
 
 
@@ -33,7 +33,7 @@ const user_verify = {
         }),
         Delivery: Joi.object({
             transmission: Joi.string().valid('Manual', 'Automatic', 'Both').required(),
-            price_km: Joi.number().precision(3).required(),
+            price_km: Joi.number().precision(3).positive().required(),
             account_number: Joi.number().integer().required(),
             balance: Joi.number().integer().required()
         }),
@@ -57,7 +57,7 @@ const user_verify = {
         }),
         Delivery: Joi.object({
             transmission: Joi.string().valid('Manual', 'Automatic', 'Both'),
-            price_km: Joi.number().precision(3),
+            price_km: Joi.number().precision(3).positive(),
             account_number: Joi.number().integer(),
             balance: Joi.number().integer(),
             is_available: Joi.any()
@@ -90,7 +90,8 @@ const comp_verify = {
         description: Joi.string().min(10),
         price: Joi.number().precision(3).positive()
     })
-}
+};
+
 const item_verify = {
     postItem: Joi.object({
         item_location: Joi.string().min(3).required(),
@@ -105,7 +106,7 @@ const item_verify = {
         phone_ip: Joi.string(),
         owner_id: Joi.number(),
     })
-}
+};
 
 const notification_verify = {
     postNotification_: Joi.object({
@@ -120,7 +121,7 @@ const complaint_verify = {
     post_complaints: Joi.object({
         description: Joi.string().required(),
     })
-}
+};
 
 const userTrip_verify = {
     add_trip: Joi.object({
@@ -148,7 +149,7 @@ const userTrip_verify = {
         rate: Joi.any(),
         paid: Joi.any()
     })
-}
+};
 
 const product_verify = {
     postProduct: Joi.object({
@@ -172,6 +173,57 @@ const competitor_verify = {
         user_id: Joi.number().required(),
         item_id: Joi.number().required(),
     })
-}
+};
 
-export { client, user_verify, comp_verify, item_verify, notification_verify, complaint_verify, userTrip_verify, product_verify, discount_verify, competitor_verify };
+const center_verify = {
+    add_center: Joi.object({
+        center_name: Joi.string().min(2).required(),
+        contact_number: Joi.number().integer().positive().required(),
+        email: Joi.string().email().max(50).required(),
+        center_location: Joi.string().min(2).required(),
+        balance: Joi.number().precision(3).positive().required(),
+        account_number: Joi.number().integer().positive().required(),
+        rent_price: Joi.number().positive().precision(3),
+        opening_hours: Joi.number().positive().integer()
+    }),
+    update_center: Joi.object({
+        center_id: Joi.number().integer().positive().required(),
+        center_name: Joi.string().min(2),
+        contact_number: Joi.number().integer().positive(),
+        email: Joi.string().email().max(50),
+        center_location: Joi.string().min(2),
+        balance: Joi.number().precision(3).positive(),
+        account_number: Joi.number().integer().positive(),
+        rent_price: Joi.number().positive().precision(3),
+        opening_hours: Joi.number().positive().integer()
+    })
+
+};
+
+const car_verify = {
+    add_car: Joi.object({
+        brand: Joi.string().min(2).max(50).required(),
+        model: Joi.string().min(2).max(50).required(),
+        price: Joi.number().precision(2).positive().required(),
+        transmission: Joi.string().valid('Manual','Automatic').required(),
+        manufacturing_date: Joi.date(),
+        center_id: Joi.number().integer().positive()
+    }),
+    update_car: Joi.object({
+        car_id: Joi.number().integer().positive().required(),
+        brand: Joi.string().min(2).max(50),
+        model: Joi.string().min(2).max(50),
+        price: Joi.number().precision(2).positive(),
+        transmission: Joi.string().valid('Manual','Automatic'),
+        manufacturing_date: Joi.date(),
+        center_id: Joi.number().integer().positive(),
+        is_available: Joi.boolean()
+    })
+};
+
+export {
+    client, user_verify, comp_verify, item_verify,
+    notification_verify, complaint_verify, userTrip_verify,
+    product_verify, discount_verify, competitor_verify,
+    center_verify, car_verify
+};
