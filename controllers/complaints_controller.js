@@ -29,6 +29,7 @@ async function post_complaint(req, res) {
     }
 }
 async function delete_complaints(req, res) {
+
     try {
         const { id } = req.params;
         if (!parseInt(id)) {
@@ -44,6 +45,7 @@ async function delete_complaints(req, res) {
 
     }
 }
+
 async function get_all_complaints(req, res) {
     try {
         let q = `select * from complaints`;
@@ -53,4 +55,6 @@ async function get_all_complaints(req, res) {
         res.status(500).send({ msg: error, status: "failed" })
     }
 }
+
+
 export { post_complaint, delete_complaints, get_all_complaints }

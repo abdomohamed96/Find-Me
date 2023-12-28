@@ -121,4 +121,17 @@ async function updateComp(req, res) {
     }
 }
 
-export { add_comp, delete_comp, showAll_Comp, updateComp };
+async function get_user_comp(req, res) {
+    try {
+        const data = (await client.query(`select * from competitions where manager_id = ${req.user.user_id} ;`)).rows;
+        res.status(200).json({ status: 'success', table: data });
+        return;
+
+    } catch (err) {
+        console.log("there is an error occured during showing my competititon");
+        res.status(400).json({ mess: "there is an error occured during showing my competititon, try again", err })
+        return;
+    }
+}
+
+export { add_comp, delete_comp, showAll_Comp, updateComp, get_user_comp };

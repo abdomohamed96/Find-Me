@@ -38,10 +38,10 @@ async function get_sended_or_recieved_notification_byID(req, res) {
             throw err
         }
         let q = `select * from notifications where sender_id=${id}`;
-        if (sender != '1') {
+        if (sender != '1') {    //sender is like a flage indicates type of notifications what user want
             q = `select * from notifications where receiver_id=${id}`;
         }
-        const result = await client.query(q)
+        const result = await client.query(q);
         return res.status(200).send({ data: result.rows, status: "success" })
     } catch (error) {
         return res.status(400).send({ msg: error, status: "failed" });

@@ -38,7 +38,6 @@ async function LogIn(req, res) {
                 return res.status(400).json({ mess: 'Has no permession to log in as employee' });
             }
         }
-        console.log(data)
         const token = Jwt.sign({ id: found_user[0].user_id, user_type: data.user_type }, process.env.SECRET, { expiresIn: process.env.EXPIRE });
         return res.status(201).json({ message: "User looged in successfully", token });
 
