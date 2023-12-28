@@ -132,34 +132,26 @@ async function update_trip(req, res) {
                 res.status(400).json({ status: 'failed', mess: error.details[0].message });
                 return;
             }
-            // let change_driver = '';
-            // let chang_distance = '';
-            // if (data.driver_id !== undefined) {
-            //     change_driver = `driver_id = ${data.driver_id},`;
-            //     const isAvai = (await client.query(`select * from delivery where user_id = ${data.driver_id};`));
-            //     if (!isAvai.rows[0].is_available) {
-            //         res.status(400).son({ status: 'failed', mess: 'This driver is not available' });
-            //     }
-            // }
-            // if (data.distance !== undefined) {
-            //     chang_distance = `distance = ${data.distance}`;
-            // }
+            let change_driver = '';
+            let chang_distance = '';
 
-            let attr_lis = ['driver_id', 'distance'];
-            let change = '';
-            attr_lis.forEach((ele) => {
-                if (data[ele] !== undefined) {
-                    if (ele === 'driver_id') {
-                        (client.query(`select * from delivery where user_id = ${data.driver_id};`)).then((rows) => {
-                            if (!rows[0].is_available) {
-                                res.status(400).son({ status: 'failed', mess: 'This driver is not available' });
-                                return;
-                            }
-                        });
-                    }
-                    change += `${ele}='${data[ele]}',`;
+            if (data.driver_id !== undefined) {
+                change_driver = `driver_id = ${data.driver_id},`;
+                let new_deliv = (await client.query(`select * from delivery where user_id = ${data.driver_id};`)).rows;
+                if (new_deliv.length === 0) {
+                    res.status(400).son({ status: 'failed', mess: 'Not found this delivery' });
+                    return;
                 }
-            });
+                let loc_deliv = (await client.query(`select * from users where user_id = ${data.driver_id};`)).rows;
+                if (!new_deliv[0].is_available || loc_deliv[0].location !== req.user.location) {
+                    res.status(400).json({ status: 'failed', mess: 'This driver is not available or not found in the same location' });
+                    return;
+                }
+            }
+            if (data.distance !== undefined) {
+                chang_distance = `distance = ${data.distance},`;
+            }
+
             if (change === '') {
                 res.status(200).json({ status: 'success', mess: 'No update executed' });
                 return;

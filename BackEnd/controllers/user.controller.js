@@ -245,19 +245,25 @@ async function getUser(req, res) {
             res.status(400).json({ status: 'failed', err: error.details[0].message });
             return;
         }
+        const user = (await client.query(`select * from users where user_id = ${id}`)).rows;
+        if (user.length === 0) {
+            res.status(400).json({ status: 'failed', mess: `Can't found this user` });
+            return;
+        }
+
         const normal = (await client.query(`select * from normal_users where user_id = ${id};`));
         if (normal.rowCount !== 0) {
-            res.status(200).json({ status: 'success', data: { ...(normal.rows[0]), user_type: 'Normal_user' } });
+            res.status(200).json({ status: 'success', data: { ...(user[0]), ...(normal.rows[0]), user_type: 'Normal_user' } });
             return;
         }
         const employee = (await client.query(`select * from employee where user_id = ${id};`));
         if (employee.rowCount !== 0) {
-            res.status(200).json({ status: 'success', data: { ...(employee.rows[0]), user_type: 'Employee' } });
+            res.status(200).json({ status: 'success', data: { ...(user[0]), ...(employee.rows[0]), user_type: 'Employee' } });
             return;
         }
         const delivery = (await client.query(`select * from delivery where user_id = ${id};`));
         if (delivery.rowCount !== 0) {
-            res.status(200).json({ status: 'success', data: { ...(delivery.rows[0]), user_type: 'Delivery' } });
+            res.status(200).json({ status: 'success', data: { ...(user[0]), ...(delivery.rows[0]), user_type: 'Delivery' } });
             return;
         }
         res.status(400).json({ status: 'failed', mess: `Can't found this user` });
