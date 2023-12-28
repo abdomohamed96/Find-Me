@@ -1,15 +1,4 @@
 import { client, complaint_verify } from "../models/data-model.js";
-/*
-create table complaints(
-    complaint_id serial primary key,
-    description varchar not null,
-    status varchar default 'in progress',
-    send_date date,
-    resolved_date date,
-    feedback varchar,
-    user_id integer not null
-    );
-*/
 async function update_complaint(req, res) {
     try {
         const { id } = req.params;
@@ -34,8 +23,8 @@ async function update_complaint(req, res) {
             const date = new Date();
             let tempDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
             var resolved_date = `resolved_date='${tempDate}',`
-        }else{
-            resolved_date="";
+        } else {
+            resolved_date = "";
         }
         let temp = `${resolved_date} ${status} ${feedback}`
         let setPart = temp.trim();

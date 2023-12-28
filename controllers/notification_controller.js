@@ -9,14 +9,14 @@ async function postNotification(req, res) {
         if (!data.notification_date) {
             data.notification_date = new Date().toJSON().split("T")[0];
         }
-        if (data.reciever_id.toString() == data.sender_id.toString()) {
+        if (data.reciever_id.toString() == req.user.user_id.toString()) {
             const err = new Error();
             err.message = "you are not allowed to send notification to yourself";
             throw err
         }
         const q = `INSERT INTO public.notifications(
             sender_id, receiver_id, description, notification_date)
-            VALUES  (${data.sender_id},${data.reciever_id},'${data.description}', '${data.notification_date}');`
+            VALUES  (${req.user.user_id},${data.reciever_id},'${data.description}', '${data.notification_date}');`
         await client.query(q);
         return res.status(200).send({ msg: "inserted successfully", status: "success" })
     } catch (error) {
@@ -26,21 +26,12 @@ async function postNotification(req, res) {
 }
 async function get_sended_or_recieved_notification_byID(req, res) {
     try {
-        const { id, sender } = req.query;
-        if (!id || !sender) {
-            const err = new Error();
-            err.message = "you should specify the query parameter id = & sender or reciceve for sending set sender =1"
-            throw err
-        }
-        if (!parseInt(id)) {
-            const err = new Error();
-            err.message = "id should be number"
-            throw err
-        }
-        let q = `select * from notifications where sender_id=${id}`;
-        if (sender != '1') {
-            q = `select * from notifications where receiver_id=${id}`;
-        }
+        let q = "";
+        if (req.user.user_type == 'Employee') {
+            q = `select * from notifications where sender_id=${req.user.user_id} or receiver_id=${req.user.user_id}`;
+        } else {
+            q = `select * from notifications where receiver_id=${req.user.user_id}`;
+        }   
         const result = await client.query(q)
         return res.status(200).send({ data: result.rows, status: "success" })
     } catch (error) {
@@ -56,7 +47,7 @@ async function delete_notification(req, res) {
             err.message = "id should be number"
             throw err
         }
-        let q = `DELETE FROM public.notifications WHERE sender_id=${id};`
+        let q = `DELETE FROM public.notifications WHERE notification_id=${id};`
         const result = await client.query(q)
         return res.status(200).send({ deleted_rows: result.rowCount, status: "success" })
     } catch (error) {
