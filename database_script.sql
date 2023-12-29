@@ -218,7 +218,7 @@ Brand		Varchar(50)		not null,
 Model		Varchar(50)		not null,
 Pirce		INT		not null,
 transmission	Varchar(50)   check(Transmission in ('Manual', 'Automatic')),
-is_available		bit 	not null,
+is_available		boolean 	not null,
 manufacturing_date		Date,
 
 Primary key(Car_id)
@@ -268,7 +268,7 @@ CREATE TABLE Delivery(
 User_id		int		not null,
 Transmission	Varchar(50)   check(Transmission in ('Manual', 'Automatic')),
 Price_Km		float		not null,
-Is_available		bit 	not null,
+Is_available		boolean 	not null,
 primary key(User_id)
 );
 
@@ -576,7 +576,6 @@ ALTER TABLE complaints
 ADD CONSTRAINT statusCheck CHECK 
 (status IN ('in_progress', 'resolved'));
 
-
 alter table user_trips drop constraint delivery_user_fk;
 alter table user_trips add constraint delivery_user_fk foreign key(driver_id) references delivery(user_id) 
 on update cascade on delete set null;
@@ -592,6 +591,7 @@ alter table competitions drop constraint manager_user_fk;
 
  alter table employee add column is_admin boolean DEFAULT false;
 
+alter table items drop column item_photo;
 
 
 
