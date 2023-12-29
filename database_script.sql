@@ -38,10 +38,10 @@ CREATE TABLE items (
 	);
 
 	create table user_trips (
-	driver_id int not null,
-	owner_id int not null,
+	driver_id int,
+	owner_id int,
 	item_id int not null,
-	primary key(driver_id,owner_id,item_id),
+	primary key(item_id),
 	distance float not null,
 	rate float
 	);
@@ -359,7 +359,7 @@ ALTER TABLE user_trips
 ADD CONSTRAINT delivery_user_fk
 FOREIGN KEY (driver_id)
 REFERENCES delivery (user_id)
-on delete cascade
+on delete set null
 on update cascade;
 
 
@@ -396,7 +396,7 @@ ALTER TABLE user_trips
 ADD CONSTRAINT user_trip_user_fk
 FOREIGN KEY (owner_id)
 REFERENCES normal_users (user_id)
-on delete cascade
+on delete set null
 on update cascade;
 
 ALTER TABLE items
@@ -514,7 +514,7 @@ REFERENCES centers (center_id)
 on delete cascade
 on update cascade;
 
-
+-----------------------------------editing in database---------------------------
 alter table cars alter column pirce type float;
 alter table cars Rename column pirce to price;
 
@@ -535,7 +535,68 @@ ALTER TABLE delivery ADD CONSTRAINT delivery_transmission_check CHECK (transmiss
 
 ALTER TABLE products ADD CONSTRAINT check_typeof_product CHECK (product_type IN ('laptop', 'phone', 'glass','watch'));
 
--- PROCEDURE: public.add_user(character varying, character varying, integer, character varying, text, character varying, integer, character varying)
+alter table centers add constraint email_key unique (email);
+alter table centers add constraint contactNumber_key unique (contact_number);
+alter table centers add constraint accountNumber_key unique (account_number);
+alter table humanitarian_work add constraint accountNumberWork_key unique (account_number);
+alter table users add constraint emailuser_key unique (email);
+alter table users add constraint phonenumber_key unique (phone_number);
+alter table delivery add constraint deliv_account_k unique(account_number);
+alter table delivery add constraint deliv_k unique(account_number);
+alter table normal_users add constraint normal_k unique(account_number);
+
+
+ALTER TABLE complaints
+ADD CONSTRAINT complaints_user_foregin_k
+FOREIGN KEY (user_id)
+REFERENCES users (user_id)
+on delete cascade
+on update cascade;
+
+alter table products drop column center_id;
+alter table products add column center_id int references centers; 
+
+ALTER TABLE products
+ADD CONSTRAINT products_center_fk
+FOREIGN KEY (center_id)
+REFERENCES centers (center_id)
+on delete set null
+on update cascade;
+
+alter table delivery add column drive_now boolean default false;
+
+drop table who_drive;
+
+alter table user_trips add column car_id integer;
+alter table user_trips add constraint car_user_trip_fk foreign key(car_id) references cars(car_id) 
+on update cascade on delete set null;
+
+
+ALTER TABLE complaints
+ADD CONSTRAINT statusCheck CHECK 
+(status IN ('in_progress', 'resolved'));
+
+
+alter table user_trips drop constraint delivery_user_fk;
+alter table user_trips add constraint delivery_user_fk foreign key(driver_id) references delivery(user_id) 
+on update cascade on delete set null;
+
+alter table user_trips drop constraint user_trip_user_fk;
+alter table user_trips add constraint user_trip_user_fk foreign key(owner_id) references normal_users(user_id) 
+on update cascade on delete set null;
+
+
+alter table competitions drop constraint manager_user_fk;
+ alter table competitions add constraint manager_user_fk foreign key(manager_id) references normal_users(user_id)
+ on update cascade on delete cascade;
+
+ alter table employee add column is_admin boolean DEFAULT false;
+
+
+
+
+ -------------------------procedures and functions----------------------
+ -- PROCEDURE: public.add_user(character varying, character varying, integer, character varying, text, character varying, integer, character varying)
 
 -- DROP PROCEDURE IF EXISTS public.add_user(character varying, character varying, integer, character varying, text, character varying, integer, character varying);
 
@@ -557,6 +618,76 @@ values(
 $BODY$;
 ALTER PROCEDURE public.add_user(character varying, character varying, integer, character varying, text, character varying, integer, character varying)
     OWNER TO postgres;
+
+-- PROCEDURE: public.add_comp(integer, character varying, date, date, character varying, double precision, integer, integer)
+
+-- DROP PROCEDURE IF EXISTS public.add_comp(integer, character varying, date, date, character varying, double precision, integer, integer);
+
+CREATE OR REPLACE PROCEDURE public.add_comp(
+	IN searched_item integer,
+	IN competition_name character varying,
+	IN start_date date,
+	IN end_date date,
+	IN description character varying,
+	IN price double precision,
+	IN manager_id integer,
+	IN winner_id integer)
+LANGUAGE 'sql'
+AS $BODY$
+insert into competitions ("searched_item","competition_name","start_date","end_date","description","price","manager_id","winner_id") 
+values(
+	searched_item,competition_name,start_date,end_date,description,price,manager_id,winner_id
+);
+$BODY$;
+ALTER PROCEDURE public.add_comp(integer, character varying, date, date, character varying, double precision, integer, integer)
+    OWNER TO postgres;
+
+
+-- PROCEDURE: public.add_center(character varying, bigint, character varying, character varying, double precision, double precision, double precision, bigint)
+
+-- DROP PROCEDURE IF EXISTS public.add_center(character varying, bigint, character varying, character varying, double precision, double precision, double precision, bigint);
+
+CREATE OR REPLACE PROCEDURE public.add_center(
+	IN name character varying,
+	IN contact_num bigint,
+	IN email character varying,
+	IN location character varying,
+	IN rent_price double precision,
+	IN opening_hours double precision,
+	IN balance double precision,
+	IN account_num bigint)
+LANGUAGE 'sql'
+AS $BODY$
+insert into centers ("center_name","contact_number","email","center_location",
+	"rent_price","opening_hours","balance","account_number") values(name,contact_num,
+	email,location,rent_price,opening_hours,balance,account_num)
+$BODY$;
+ALTER PROCEDURE public.add_center(character varying, bigint, character varying, character varying, double precision, double precision, double precision, bigint)
+    OWNER TO postgres;
+
+
+-- PROCEDURE: public.add_car(date, character varying, character varying, double precision, character varying, date, integer)
+
+-- DROP PROCEDURE IF EXISTS public.add_car(date, character varying, character varying, double precision, character varying, date, integer);
+
+CREATE OR REPLACE PROCEDURE public.add_car(
+	IN registration_date date,
+	IN brand character varying,
+	IN model character varying,
+	IN price double precision,
+	IN transmission character varying,
+	IN manufacturing_date date,
+	IN center_id integer)
+LANGUAGE 'sql'
+AS $BODY$
+insert into cars ("registration_date","brand","model","price",
+	"transmission","manufacturing_date","center_id","is_available") values(registration_date,brand,
+	model,price,transmission,manufacturing_date,center_id,true)
+$BODY$;
+ALTER PROCEDURE public.add_car(date, character varying, character varying, double precision, character varying, date, integer)
+    OWNER TO postgres;
+
+
 
 CREATE OR REPLACE FUNCTION public.pay(
 	userid integer,
@@ -594,54 +725,39 @@ $BODY$;
 ALTER FUNCTION public.pay(integer, integer, numeric)
     OWNER TO postgres;
 
--- PROCEDURE: public.add_comp(integer, character varying, date, date, character varying, double precision, integer, integer)
 
--- DROP PROCEDURE IF EXISTS public.add_comp(integer, character varying, date, date, character varying, double precision, integer, integer);
+-- FUNCTION: public.rent(integer, integer, numeric)
 
-CREATE OR REPLACE PROCEDURE public.add_comp(
-	IN searched_item integer,
-	IN competition_name character varying,
-	IN start_date date,
-	IN end_date date,
-	IN description character varying,
-	IN price double precision,
-	IN manager_id integer,
-	IN winner_id integer)
-LANGUAGE 'sql'
+-- DROP FUNCTION IF EXISTS public.rent(integer, integer, numeric);
+
+CREATE OR REPLACE FUNCTION public.rent(
+	carid integer,
+	delivid integer,
+	deliv_balance numeric)
+    RETURNS boolean
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
 AS $BODY$
-insert into competitions ("searched_item","competition_name","start_date","end_date","description","price","manager_id","winner_id") 
-values(
-	searched_item,competition_name,start_date,end_date,description,price,manager_id,winner_id
-);
+DECLARE
+    rent_price NUMERIC;
+
+BEGIN
+   rent_price := 0;
+   SELECT price into rent_price from cars where cars.car_id = carid ;
+
+	if deliv_balance >= rent_price then
+		update centers set balance = balance + s.price from(select * from cars where "car_id" = carid) 
+		as s where centers.center_id = s.center_id;
+ 
+ 		update delivery set balance = balance - s.price from 
+		(select * from cars as c where c.car_id = carid ) as s where delivery.user_id = delivid;
+		return true;
+	else
+		return false;
+	end if;
+END;
 $BODY$;
-ALTER PROCEDURE public.add_comp(integer, character varying, date, date, character varying, double precision, integer, integer)
+
+ALTER FUNCTION public.rent(integer, integer, numeric)
     OWNER TO postgres;
-
-
-ALTER TABLE complaints
-ADD CONSTRAINT complaints_user_foregin_k
-FOREIGN KEY (user_id)
-REFERENCES users (user_id)
-on delete cascade
-on update cascade;
-
-alter table products drop column center_id;
-alter table products add column center_id int references centers; 
-
-ALTER TABLE products
-ADD CONSTRAINT products_center_fk
-FOREIGN KEY (center_id)
-REFERENCES centers (center_id)
-on delete set null
-on update cascade;
-
-drop table who_drive;
-
-alter table user_trips add column car_id integer;
-alter table user_trips add constraint car_user_trip_fk foreign key(car_id) references cars(car_id) 
-on update cascade on delete set null;
-
-
-ALTER TABLE complaints
-ADD CONSTRAINT statusCheck CHECK 
-(status IN ('in_progress', 'resolved'));
