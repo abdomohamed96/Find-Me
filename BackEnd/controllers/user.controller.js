@@ -100,7 +100,7 @@ async function AddUser(req, res, next) {
         if (common_part.user_type === 'Normal_user') {
             await client.query(`insert into normal_users (user_id) values(${id});`);
         } else if (common_part.user_type === 'Delivery') {
-            await client.query(`insert into delivery values(${id},'${data.transmission}',${data.price_km},true,${data.account_number},${data.balance});`);
+            await client.query(`insert into delivery values(${id},'${data.transmission}',${data.price_km},true,${data.balance});`);
         } else {
             await client.query(`insert into employee values (${id},${data.salary},${data.working_hours},${data.centerID ?? null},${data.isAdmin});`);
         }
@@ -157,7 +157,6 @@ async function update_user(req, res) {
 
         if (req.user.user_type === 'Normal_user') {
             const { error } = Joi.object({
-                account_number: Joi.number().integer(),
                 balance: Joi.number().integer()
             }).validate(data, { abortEarly: false });
             if (error) {
@@ -165,9 +164,6 @@ async function update_user(req, res) {
                 return;
             }
             let str_normal = '';
-            if (data.account_number !== undefined) {
-                str_normal += `account_number = ${data.account_number},`;
-            }
             if (data.balance !== undefined) {
                 str_normal += `balance = ${data.balance}`;
             }
@@ -182,7 +178,7 @@ async function update_user(req, res) {
                 return;
             }
             let str_deliv = '';
-            let lis = ['transmission', 'price_km', 'account_number', 'balance'];
+            let lis = ['transmission', 'price_km', 'balance'];
             lis.forEach((ele) => {
                 if (data[ele] !== undefined) {
                     str_deliv += `${ele}='${data[ele]}',`;

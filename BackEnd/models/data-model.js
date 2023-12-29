@@ -34,7 +34,6 @@ const user_verify = {
         Delivery: Joi.object({
             transmission: Joi.string().valid('Manual', 'Automatic', 'Both').required(),
             price_km: Joi.number().precision(3).positive().required(),
-            account_number: Joi.number().integer().required(),
             balance: Joi.number().integer().required()
         }),
         Employee: Joi.object({
@@ -58,7 +57,6 @@ const user_verify = {
         Delivery: Joi.object({
             transmission: Joi.string().valid('Manual', 'Automatic', 'Both'),
             price_km: Joi.number().precision(3).positive(),
-            account_number: Joi.number().integer(),
             balance: Joi.number().integer(),
             is_available: Joi.any()
         })
@@ -182,7 +180,6 @@ const center_verify = {
         email: Joi.string().email().max(50).required(),
         center_location: Joi.string().min(2).required(),
         balance: Joi.number().precision(3).positive().required(),
-        account_number: Joi.number().integer().positive().required(),
         rent_price: Joi.number().positive().precision(3),
         opening_hours: Joi.number().positive().integer()
     }),
@@ -193,7 +190,6 @@ const center_verify = {
         email: Joi.string().email().max(50),
         center_location: Joi.string().min(2),
         balance: Joi.number().precision(3).positive(),
-        account_number: Joi.number().integer().positive(),
         rent_price: Joi.number().positive().precision(3),
         opening_hours: Joi.number().positive().integer()
     })

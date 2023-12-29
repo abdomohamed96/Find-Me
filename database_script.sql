@@ -593,6 +593,12 @@ alter table competitions drop constraint manager_user_fk;
 
 alter table items drop column item_photo;
 
+alter table centers add constraint location_key  unique(center_location);
+
+
+alter table centers drop column account_number;
+alter table delivery drop column account_number;
+alter table normal_users drop column account_number;
 
 
  -------------------------procedures and functions----------------------
@@ -643,9 +649,9 @@ ALTER PROCEDURE public.add_comp(integer, character varying, date, date, characte
     OWNER TO postgres;
 
 
--- PROCEDURE: public.add_center(character varying, bigint, character varying, character varying, double precision, double precision, double precision, bigint)
+-- PROCEDURE: public.add_center(character varying, bigint, character varying, character varying, double precision, double precision, double precision)
 
--- DROP PROCEDURE IF EXISTS public.add_center(character varying, bigint, character varying, character varying, double precision, double precision, double precision, bigint);
+-- DROP PROCEDURE IF EXISTS public.add_center(character varying, bigint, character varying, character varying, double precision, double precision, double precision);
 
 CREATE OR REPLACE PROCEDURE public.add_center(
 	IN name character varying,
@@ -654,15 +660,14 @@ CREATE OR REPLACE PROCEDURE public.add_center(
 	IN location character varying,
 	IN rent_price double precision,
 	IN opening_hours double precision,
-	IN balance double precision,
-	IN account_num bigint)
+	IN balance double precision)
 LANGUAGE 'sql'
 AS $BODY$
 insert into centers ("center_name","contact_number","email","center_location",
-	"rent_price","opening_hours","balance","account_number") values(name,contact_num,
-	email,location,rent_price,opening_hours,balance,account_num)
+	"rent_price","opening_hours","balance") values(name,contact_num,
+	email,location,rent_price,opening_hours,balance)
 $BODY$;
-ALTER PROCEDURE public.add_center(character varying, bigint, character varying, character varying, double precision, double precision, double precision, bigint)
+ALTER PROCEDURE public.add_center(character varying, bigint, character varying, character varying, double precision, double precision, double precision)
     OWNER TO postgres;
 
 

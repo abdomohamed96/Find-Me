@@ -16,7 +16,7 @@ async function add_center(req, res) {
             return;
         }
         await client.query(`call add_center('${data.center_name}',${data.contact_number},'${data.email}','${data.center_location}',
-            ${data.rent_price ?? null},${data.opening_hours ?? null},${data.balance},${data.account_number}); `);
+            ${data.rent_price ?? null},${data.opening_hours ?? null},${data.balance}); `);
         res.status(200).json({ status: 'success', mess: 'insertion done' });
         return;
     } catch (err) {
@@ -38,7 +38,7 @@ async function update_center(req, res) {
             return;
         }
         let change = '';
-        let attr_lis = ['center_name', 'contact_number', 'email', 'center_location', 'balance', 'account_number', 'rent_price', 'opening_hours'];
+        let attr_lis = ['center_name', 'contact_number', 'email', 'center_location', 'balance', 'rent_price', 'opening_hours'];
         attr_lis.forEach((ele) => {
             if (data[ele] !== undefined) {
                 change += `${ele}='${data[ele]}',`;
