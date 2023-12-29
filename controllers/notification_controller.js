@@ -31,7 +31,7 @@ async function get_sended_or_recieved_notification_byID(req, res) {
             q = `select * from notifications where sender_id=${req.user.user_id} or receiver_id=${req.user.user_id}`;
         } else {
             q = `select * from notifications where receiver_id=${req.user.user_id}`;
-        }   
+        }
         const result = await client.query(q)
         return res.status(200).send({ data: result.rows, status: "success" })
     } catch (error) {
