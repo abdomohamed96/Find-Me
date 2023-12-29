@@ -86,25 +86,25 @@ async function update_product(req, res) {
         }
         let qq = `SELECT * FROM public.normal_users where user_id=${req.user.user_id}`;
         const buyer = (await client.query(qq));
-        if (buyer.rowCount!=0) {
+        if (buyer.rowCount != 0) {
             var customer_id = `customer_id=${req.user.user_id},`
-            
+
             //make query to get product price
             let product_balance = await client.query(`select * from products where product_id=${id}`)
             if (buyer.rows[0].balance && buyer.rows[0].balance >= product_balance.rows[0].price) {
                 let q = `update public.normal_users set balance=balance-${product_balance.rows[0].price}`;
                 await client.query(q);
                 const date = new Date();
-                let tempDate= `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+                let tempDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
                 var sold_date = `sold_date='${tempDate}',`
             } else {
                 const err = new Error();
                 err.message = "You don't have enough money";
                 throw err
             }
-        }else {
+        } else {
             var customer_id = ""
-            var sold_date=""
+            var sold_date = ""
         }
         if (!data.center_id) {
             var center_id = ""

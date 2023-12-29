@@ -6,7 +6,7 @@ async function postItem(req, res) {
         if (error) {
             return res.status(400).send({ msg: error, status: "failed" });
         }
-        data.owner_id=data.owner_id??null;
+        data.owner_id = data.owner_id ?? null;
         if (!data.item_color) {
             var item_color = null
         }
@@ -41,7 +41,7 @@ async function postItem(req, res) {
         }
         const q = `INSERT INTO public.items(
             item_location, item_color, is_lost, item_date, item_type, brand, version_type, glass_size, glass_lens_type, phone_ip, owner_id)
-            VALUES ('${data.item_location}', ${item_color}, ${data.is_lost},'${data.item_date}','${data.item_type}', ${brand}, ${version_type}, ${glass_size}, ${glass_lens_type}, ${phone_ip},${data.owner_id});`
+            VALUES ('${data.item_location}', ${item_color}, ${data.is_lost},'${data.item_date}','${data.item_type}', ${brand}, ${version_type}, ${glass_size}, ${glass_lens_type}, ${phone_ip},${req.user.user_id.owner_id ?? null});`
         const result = await client.query(q)
         res.status(200).send({ msg: "inserted successfuly", status: "success" })
     } catch (error) {
@@ -131,7 +131,7 @@ async function update_items(req, res) {
         } else {
             var item_date = `item_date='${data.item_date}',`
         }
-        if (!data.is_lost && data.is_lost!=false) {
+        if (!data.is_lost && data.is_lost != false) {
             var is_lost = ""
         } else {
             var is_lost = `is_lost=${data.is_lost},`
