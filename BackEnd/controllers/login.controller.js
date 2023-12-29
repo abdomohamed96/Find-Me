@@ -39,7 +39,7 @@ async function LogIn(req, res) {
             }
         }
         const token = Jwt.sign({ id: found_user[0].user_id, user_type: data.user_type }, process.env.SECRET, { expiresIn: process.env.EXPIRE });
-        return res.status(201).json({ message: "User looged in successfully", token });
+        return res.status(201).json({ mess: "User looged in successfully", token });
 
     } catch (err) {
         console.log('there is error happenning while logging up');

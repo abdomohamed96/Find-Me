@@ -3,7 +3,7 @@
 import Joi from "joi";
 import jwt from "jsonwebtoken";
 import { client, user_verify } from "../models/data-model.js";
-import bcrypt from 'bcrypt';
+import bcrypt, { hash } from 'bcrypt';
 
 /**
  * 
@@ -144,10 +144,16 @@ async function update_user(req, res) {
         let change_str = '';
         base_att.forEach((ele) => {
             if (common_part[ele] !== undefined) {
-                change_str += `${ele}='${common_part[ele]}',`;
+                if (ele === 'password') {
+                } else {
+                    change_str += `${ele}='${common_part[ele]}',`;
+                }
             }
         });
-
+        if (common_part['password'] !== undefined) {
+            const hashed = await bcrypt.hash(common_part['password'], 10);
+            change_str += `password='${hashed}',`;
+        }
 
         if (req.user.user_type === 'Normal_user') {
             const { error } = Joi.object({
@@ -207,7 +213,15 @@ async function update_user(req, res) {
 async function get_myUser(req, res) {
     try {
         const data = (await client.query(`select * from users where user_id = ${req.user.user_id}`)).rows;
-        res.status(200).json({ status: 'success', data });
+        let more_info;
+        if (req.user.user_type === 'Normal_user') {
+            more_info = (await client.query(`select * from normal_users where user_id = ${req.user.user_id}`)).rows;
+        } else if (req.user.user_type === 'Delivery') {
+            more_info = (await client.query(`select * from delivery where user_id = ${req.user.user_id}`)).rows;
+        } else {
+            more_info = (await client.query(`select * from employee where user_id = ${req.user.user_id}`)).rows;
+        }
+        res.status(200).json({ status: 'success', data: { ...data[0], ...more_info[0], user_type: req.user.user_type } });
         return;
     } catch (err) {
         res.status(400).json({ mess: "An error occurred while showing all users.", err });
