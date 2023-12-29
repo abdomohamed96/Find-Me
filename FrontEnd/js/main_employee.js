@@ -1,4 +1,5 @@
-import { is_found } from "./main_user.js";
+// import { is_found } from "./main_user.js";
+let is_found = 0;
 let notification_text,
   products_code = "",
   backend_products;
@@ -19,7 +20,7 @@ backend_products = [
     type: "glass",
   },
 ];
-console.log(is_found);
+
 let notification_btn = document.querySelector(
   ".notification .submit_notification"
 );
@@ -40,46 +41,47 @@ backend_products.forEach((el) => {
 products.innerHTML = products_code;
 
 let event_code, event_submit;
-let offer_events = document.querySelector(".set_offer .container form");
-let human_events = document.querySelector(".set_h_work .container form");
+let offer_events = document.querySelector(".set_offer  form");
+let human_events = document.querySelector(".set_h_work  form");
 let selected_event = document.querySelector("#event");
+let select_event_btn = document.querySelector(".select_event_btn");
 let myEvent = {},
   myCar = {};
-selected_event.addEventListener("change", (e) => {
+select_event_btn.addEventListener("click", (e) => {
   offer_events.innerHTML = "";
   human_events.innerHTML = "";
   event_code = `
   </div>
-    <div class="event_id">
+    <div class="event_id field padding-bottom--24">
       <label>Event ID</label>
       <input type="number" />
     </div>
-    <div class="event_name">
+    <div class="event_name field padding-bottom--24">
       <label>Event Name</label>
       <input type="text" />
     </div> 
-    <div class="event_start_date">
+    <div class="event_start_date field padding-bottom--24" >
       <label>Event Start Date</label>
       <input type="date" />
     </div>  
-    <div class="event_end_date">
+    <div class="event_end_date field padding-bottom--24">
       <label>Event End Date</label>
       <input type="date" />
     </div>    
-    <div class="description">
+    <div class="description field padding-bottom--24">
       <label>Description</label>
       <input type="text" />
     </div>
   `;
   if (e.target.value === "offer") {
     event_code += `
-      <div class="driver_or_user">
+      <div class="driver_or_user field padding-bottom--24">
         <select name="" id="driver_or_user">
           <option value="driver">Driver</option>
           <option value="user">User</option>
         </select>
       </div>
-      <div class="offer_percentage">
+      <div class="offer_percentage field padding-bottom--24">
         <label>Offer Percentage</label>
         <input type="number" />
       </div>
@@ -88,19 +90,19 @@ selected_event.addEventListener("change", (e) => {
     offer_events.innerHTML = event_code;
   } else {
     event_code += `
-      <div class="charity_account_number">
+      <div class="charity_account_number field padding-bottom--24">
         <label>Charity Account Number</label>
         <input type="number" />
       </div>
-      <div class="charity_name">
+      <div class="charity_name field padding-bottom--24">
         <label>Charity Name</label>
         <input type="text" />
       </div>
-      <div class="charity_email">
+      <div class="charity_email field padding-bottom--24">
         <label>Charity Email</label>
         <input type="mail" />
       </div>
-      <button class="event_submit">submit</button>
+      <button class="event_submit field padding-bottom--24">submit</button>
     `;
     human_events.innerHTML = event_code;
   }

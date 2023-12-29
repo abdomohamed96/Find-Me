@@ -1,6 +1,7 @@
 /* Start Variables */
 :root {
-  --main-color: #10cab7;
+  /* --main-color: #10cab7; */
+  --main-color: rgb(84, 105, 212);
   --secondary-color: #2c4755;
   --main-padding: 60px;
 }

@@ -1,16 +1,19 @@
 // import { notification_text } from "../js/main_employee.js";
 // BackEnd Variables
 let is_found = 1;
+let notification_text = "";
 //
 let notification_mes = "";
 if (sessionStorage.getItem("notification_message")) {
   notification_mes = sessionStorage.getItem("notification_message");
   console.log("ana ali");
 }
-let complaintSubmit = document.querySelector(".complaints button");
+let complaintSubmit = document.querySelector(".complaint_btn");
 let competitionSubmit = document.querySelector(".create_competition");
 let itemType = document.querySelector("#item_type");
 let form = document.querySelector(".lost_or_found_items .item_form");
+
+let select_item_type_btn = document.querySelector(".select_item_type_btn");
 let itemValues = {},
   competitionValues = {};
 let code;
@@ -28,69 +31,86 @@ function reset_data(myElements) {
 }
 function updateData() {
   code = `
-  <div class="item_id">
-    <label>Item ID</label>
-    <input type="text" />
-  </div>
-  <div class="color">
-    <label>Color</label>
-    <input type="text" />
-  </div>
-  <div class="photo">
-    <label>Photo</label>
-    <input type="text" />
-  </div>
-  <div class="location">
-    <label>Location</label>
-    <input type="text" />
-  </div>
-  <div class="brand">
-    <label>Brand</label>
-    <input type="text" />
-  </div>
+          <div class="item_id field padding-bottom--24">
+            <label for="item_id">Item ID</label>
+            <input type="number" name="item_id" class="item_id"/>
+          </div>
+          <div class="color field padding-bottom--24">
+            <div class="grid--50-50">
+              <label for="color">Color</label>
+            </div>
+            <input type="text" name="color"/>
+          </div>
+          <div class="photo field padding-bottom--24">
+            <label for="photo">Photo</label>
+            <input type="text" name="photo"  id="photo" class="photo"/>
+          </div>
+          <div class="location field padding-bottom--24">
+            <label for="location">Location</label>
+            <input type="text" name="location"  id="location" class="location"/>
+          </div>
+          <div class="brand field padding-bottom--24">
+            <label for="brand">Brand</label>
+            <input type="text" name="brand" class="brand" id="brand"/>
+          </div>
 `;
   if (sessionStorage.getItem("item_type") === "laptop") {
     code += `
-    <div class="version_type">
-      <label>Version Type</label>
-      <input type="text" />
+    <div class="version_type field padding-bottom--24">
+      <label for="version_type">Version Type</label>
+      <input type="text" id="version_type"/>
     </div>
     `;
   } else if (sessionStorage.getItem("item_type") === "glass") {
     code += `
-    <div class="size">
+    <div class="size field padding-bottom--24">
       <label>Lens Size</label>
       <input type="text" />
     </div>
-    <div class="lens_type">
+    <div class="lens_type field padding-bottom--24">
       <label>Lens Type</label>
       <input type="text" />
     </div>
     `;
   } else if (sessionStorage.getItem("item_type") === "phone") {
     code += `
-    <div class="phone_ip">
-      <label>Phone Ip</label>
-      <input type="text" />
+    <div class="phone_ip field padding-bottom--24">
+      <label for="phone_ip">Phone Ip</label>
+      <input type="text" id="phone_ip"/>
     </div>
-    <div class="version_type">
-      <label>Version Type</label>
-      <input type="text" />
+    <div class="version_type field padding-bottom--24">
+    <label for="version_type">Version Type</label>
+    <input type="text" id="version_type"/>
     </div>
     `;
   }
-  code += `<button class="lost_found_btn">submit</button>`;
+  code += `
+  <div class=" field padding-bottom--24">
+    <input
+      class="submit_item_btn"
+      type="submit"
+      name="submit"
+      value="Continue"
+    />
+  </div>
+  `;
   form.innerHTML = code;
   elements = document.querySelectorAll(".item_form > div");
-  let btn = document.querySelector(".lost_found_btn");
-  btn.addEventListener("click", (e) => {
+  let submit_item_btn = document.querySelector(".submit_item_btn");
+  submit_item_btn.addEventListener("click", (e) => {
     fill_item_data(elements, itemValues);
     reset_data(elements);
   });
 }
-itemType.addEventListener("change", (e) => {
+// itemType.addEventListener("change", (e) => {
+// itemValues = {};
+// sessionStorage.setItem("item_type", `${e.target.value}`);
+// updateData();
+// });
+
+select_item_type_btn.addEventListener("click", (e) => {
   itemValues = {};
-  sessionStorage.setItem("item_type", `${e.target.value}`);
+  sessionStorage.setItem("item_type", `${itemType.value}`);
   updateData();
 });
 
@@ -102,9 +122,8 @@ complaintSubmit.addEventListener("click", (e) => {
 });
 
 competitionSubmit.addEventListener("click", (e) => {
-  competitionElements = document.querySelectorAll(
-    ".competitions .container > div"
-  );
+  e.preventDefault();
+  competitionElements = document.querySelectorAll(".competitions form > div");
   fill_item_data(competitionElements, competitionValues);
   reset_data(competitionElements);
 });
@@ -133,4 +152,4 @@ if (is_found) {
   });
 }
 
-export { is_found };
+// export { is_found };

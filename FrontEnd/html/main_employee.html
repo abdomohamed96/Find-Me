@@ -3,114 +3,265 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Employee</title>
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/login.css" />
+    <link rel="stylesheet" href="../css/button.css" />
   </head>
   <body>
-    <div class="notification">
-      <div class="container">
-        <label for="#mes">Write Notification</label>
-        <input type="text" id="mes" />
-        <label for="#user_id">User ID</label>
-        <input type="number" id="user_id" />
-        <button class="submit_notification">submit notification</button>
-      </div>
-    </div>
-    <div class="set_product">
-      <div class="container">
-        <form action="">
-          <select name="" id="available_products"></select>
-          <div class="price">
-            <label>Price</label>
-            <input type="number" />
+    <div class="employee-root">
+      <div
+        class="box-root flex-flex flex-direction--column"
+        style="min-height: 100vh; flex-grow: 1"
+      >
+        <div class="loginbackground box-background--white padding-top--64">
+          <div class="loginbackground-gridContainer">
+            <div
+              class="box-root flex-flex"
+              style="grid-area: top / start / 8 / end"
+            >
+              <div
+                class="box-root"
+                style="
+                  background-image: linear-gradient(
+                    white 0%,
+                    rgb(247, 250, 252) 33%
+                  );
+                  flex-grow: 1;
+                "
+              ></div>
+            </div>
+            <div class="box-root flex-flex" style="grid-area: 4 / 2 / auto / 5">
+              <div
+                class="box-root box-divider--light-all-2 animationLeftRight tans3s"
+                style="flex-grow: 1"
+              ></div>
+            </div>
+            <div
+              class="box-root flex-flex"
+              style="grid-area: 6 / start / auto / 2"
+            >
+              <div
+                class="box-root box-background--blue800"
+                style="flex-grow: 1"
+              ></div>
+            </div>
+            <div
+              class="box-root flex-flex"
+              style="grid-area: 7 / start / auto / 4"
+            >
+              <div
+                class="box-root box-background--blue animationLeftRight"
+                style="flex-grow: 1"
+              ></div>
+            </div>
+            <div class="box-root flex-flex" style="grid-area: 8 / 4 / auto / 6">
+              <div
+                class="box-root box-background--gray100 animationLeftRight tans3s"
+                style="flex-grow: 1"
+              ></div>
+            </div>
+            <div
+              class="box-root flex-flex"
+              style="grid-area: 2 / 15 / auto / end"
+            >
+              <div
+                class="box-root box-background--cyan200 animationRightLeft tans4s"
+                style="flex-grow: 1"
+              ></div>
+            </div>
+            <div
+              class="box-root flex-flex"
+              style="grid-area: 3 / 14 / auto / end"
+            >
+              <div
+                class="box-root box-background--blue animationRightLeft"
+                style="flex-grow: 1"
+              ></div>
+            </div>
+            <div
+              class="box-root flex-flex"
+              style="grid-area: 4 / 17 / auto / 20"
+            >
+              <div
+                class="box-root box-background--gray100 animationRightLeft tans4s"
+                style="flex-grow: 1"
+              ></div>
+            </div>
+            <div
+              class="box-root flex-flex"
+              style="grid-area: 5 / 14 / auto / 17"
+            >
+              <div
+                class="box-root box-divider--light-all-2 animationRightLeft tans3s"
+                style="flex-grow: 1"
+              ></div>
+            </div>
           </div>
-          <button class="product_submit">submit</button>
-        </form>
-      </div>
-    </div>
-    <div class="set_discount">
-      <div class="container">
-        <form action="">
-          <div class="discount_id">
-            <label>Discount ID</label>
-            <input type="number" />
-          </div>
-          <div class="start_date">
-            <label>Start Date</label>
-            <input type="date" />
-          </div>
-          <div class="end_date">
-            <label>End Date</label>
-            <input type="date" />
-          </div>
-          <div class="percentage">
-            <label>Percentage</label>
-            <input type="number" />
-          </div>
-        </form>
-      </div>
-      <div class="select_event">
-        <select name="" id="event">
-          <option value="offer">Offer</option>
-          <option value="h_work">Humanitarian Work</option>
-        </select>
-      </div>
-      <div class="set_offer">
-        <div class="container">
-          <form action=""></form>
         </div>
-      </div>
-      <div class="set_h_work">
-        <div class="container">
-          <form action=""></form>
-        </div>
-      </div>
-    </div>
-    <div class="add_car">
-      <div class="container">
-        <form action="">
-          <div class="car_id">
-            <label>Car ID</label>
-            <input type="number" />
+        <div
+          class="box-root padding-top--24 flex-flex flex-direction--column"
+          style="flex-grow: 1; z-index: 9"
+        >
+          <div
+            class="box-root padding-top--48 padding-bottom--24 flex-flex flex-justifyContent--center"
+          >
+            <h1 id="lginh1">Employee Page</h1>
           </div>
-          <div class="registration_date">
-            <label>Registration Date</label>
-            <input type="date" />
+          <div class="notification">
+            <div class="formbg-outer emp">
+              <div class="formbg">
+                <div class="formbg-inner padding-horizontal--48">
+                  <span class="padding-bottom--15">Notification</span>
+                  <form id="stripe-login">
+                    <div class="message field padding-bottom--24">
+                      <label for="mes">Write Notification</label>
+                      <input type="text" id="mes" />
+                    </div>
+                    <div class="userId field padding-bottom--24">
+                      <label for="#user_id">User ID</label>
+                      <input type="number" id="user_id" />
+                    </div>
+                    <div class="button_container">
+                      <div class="submit_notification btn"><a>Continue</a></div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="manufacturing_date">
-            <label>Manufacturing Date</label>
-            <input type="date" />
+          <div class="set_product">
+            <div class="formbg-outer emp">
+              <div class="formbg">
+                <div class="formbg-inner padding-horizontal--48">
+                  <span class="padding-bottom--15">Our Products</span>
+                  <form id="stripe-login">
+                    <label>Available Products</label>
+                    <select name="" id="available_products"></select>
+                    <div class="price field padding-bottom--24">
+                      <label>Price</label>
+                      <input type="number" />
+                    </div>
+                    <div class="button_container">
+                      <div class="product_submit btn"><a>Continue</a></div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="is_available">
-            <label for="#is_available">Is Available </label>
-            <select name="" id="is_available">
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
+
+          <div class="select_discount">
+            <div class="formbg-outer emp">
+              <div class="formbg">
+                <div class="formbg-inner padding-horizontal--48">
+                  <span class="padding-bottom--15">Discount</span>
+                  <form id="stripe-login">
+                    <div class="discount_id field padding-bottom--24">
+                      <label for="discount_id">Discount ID</label>
+                      <input type="text" id="discount_id" />
+                    </div>
+                    <div class="start_date field padding-bottom--24">
+                      <label for="start_date">Start Date</label>
+                      <input type="number" id="start_date" />
+                    </div>
+                    <div class="end_date field padding-bottom--24">
+                      <label for="end_date">End Date</label>
+                      <input type="number" id="end_date" />
+                    </div>
+                    <div class="percentage field padding-bottom--24">
+                      <label for="percentage">Percentage</label>
+                      <input type="number" id="percentage" />
+                    </div>
+                    <div class="button_container">
+                      <div class="submit_notification btn"><a>Continue</a></div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="transmission">
-            <label>Transmission</label>
-            <input type="number" />
+
+          <div class="select_event">
+            <div class="formbg-outer emp">
+              <div class="formbg">
+                <div class="formbg-inner padding-horizontal--48">
+                  <span class="padding-bottom--15">Event</span>
+                  <form id="stripe-login">
+                    <label>Event Type</label>
+                    <select name="" id="event">
+                      <option value="offer">Offer</option>
+                      <option value="h_work">Humanitarian Work</option>
+                    </select>
+                    <div class="button_container">
+                      <div class="select_event_btn btn"><a>Continue</a></div>
+                    </div>
+                    <div class="set_offer">
+                      <form action=""></form>
+                    </div>
+                    <div class="set_h_work">
+                      <form action=""></form>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="price">
-            <label>Price</label>
-            <input type="number" />
+          <div class="add_car">
+            <div class="formbg-outer emp">
+              <div class="formbg">
+                <div class="formbg-inner padding-horizontal--48">
+                  <span class="padding-bottom--15">Car</span>
+                  <form id="stripe-login">
+                    <div class="car_id field padding-bottom--24">
+                      <label>Car ID</label>
+                      <input type="number" />
+                    </div>
+                    <div class="registration_date field padding-bottom--24">
+                      <label>Registration Date</label>
+                      <input type="date" />
+                    </div>
+                    <div class="manufacturing_date field padding-bottom--24">
+                      <label>Manufacturing Date</label>
+                      <input type="date" />
+                    </div>
+                    <div class="is_available field padding-bottom--24">
+                      <label for="#is_available">Is Available </label>
+                      <select name="" id="is_available">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                      </select>
+                    </div>
+                    <div class="transmission field padding-bottom--24">
+                      <label>Transmission</label>
+                      <input type="number" />
+                    </div>
+                    <div class="price field padding-bottom--24">
+                      <label>Price</label>
+                      <input type="number" />
+                    </div>
+                    <div class="model field padding-bottom--24">
+                      <label>Mode</label>
+                      <input type="text" />
+                    </div>
+                    <div class="brand field padding-bottom--24">
+                      <label>Brand</label>
+                      <input type="text field padding-bottom--24" />
+                    </div>
+                    <div class="center_id field padding-bottom--24">
+                      <label>Center ID</label>
+                      <input type="number field padding-bottom--24" />
+                    </div>
+                    <div class="button_container field padding-bottom--24">
+                      <div class="car_submit btn"><a>Continue</a></div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="model">
-            <label>Mode</label>
-            <input type="text" />
-          </div>
-          <div class="brand">
-            <label>Brand</label>
-            <input type="text" />
-          </div>
-          <div class="center_id">
-            <label>Center ID</label>
-            <input type="number" />
-          </div>
-          <button class="car_submit">sumbit</button>
-        </form>
-      </div>
-    </div>
+
+    
+
     <script type="module" src="../js/main_employee.js"></script>
   </body>
 </html>
